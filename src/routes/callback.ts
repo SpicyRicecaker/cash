@@ -7,21 +7,26 @@ const clientId = import.meta.env.VITE_CLIENT_ID;
 const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
 
 export const get: RequestHandler = async function (req) {
-    const code: string | null = req.query.get('code');
+    const code = req.query.get('code');
     if (!code) {
         return {};
     }
     // We want to exchange code for access token,
     const accessToken: string = await getAccessToken(code);
     // Use access token to get user info from api
-    const user: string = await getUser(accessToken);
+    // An object that contains info
+    const user = await getUser(accessToken);
 
-    // Set the access token in cookies storage,
-    // Then redirect to books page of user maybe??
+    // Setting user to login username?
+    req.locals.user = user.login;
 
     return {
+        status: 302,
+        headers: {
+            location: '/'
+        }
         // Json stringify docs basically say ([object], [closure, for filtering], [# of spaces for indent])
-        body: JSON.stringify(user, null, 2)
+        // body: JSON.stringify(user, null, 2)
     }
 }
 

@@ -1,8 +1,6 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	export const load: Load = async function ({ page, fetch, session, context }) {
-		console.log('no clue what these do', page, fetch, session, context);
-
 		const url: string = 'api/books/current';
 		const res = await fetch(url);
 
