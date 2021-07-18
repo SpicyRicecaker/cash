@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
-	export async function load({ page, fetch, session, context }) {
+	import type { Load } from '@sveltejs/kit';
+	export const load: Load = async function ({ page, fetch, session, context }) {
 		console.log('no clue what these do', page, fetch, session, context);
 
 		const url: string = 'api/books/current';
@@ -17,7 +18,7 @@
 			status: res.status,
 			error: new Error(`Could not load ${url}`)
 		};
-	}
+	};
 </script>
 
 <script lang="ts">
