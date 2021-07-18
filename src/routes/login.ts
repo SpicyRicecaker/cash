@@ -1,8 +1,9 @@
+import type { RequestHandler } from '@sveltejs/kit';
 // Location of where to authorize
 const gitAuthURL = "https://github.com/login/oauth/authorize";
 // VITE_ needed for variables to be visible for app I think?
 const clientId = import.meta.env.VITE_CLIENT_ID;
-export async function get(req) {
+export const get: RequestHandler = async function get(req) {
     const sessionId = '1234';
     return {
         // 300 status codes are for redirect responses
