@@ -50,7 +50,7 @@ export const put: RequestHandler = async (req) => {
                 },
                 prevChapter: {
                     type: "innerHTML",
-                    innerHTML: "Prev chapter"
+                    value: "Prev chapter"
                 },
             }],
         });
