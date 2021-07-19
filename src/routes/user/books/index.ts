@@ -22,12 +22,22 @@ export const get: RequestHandler = async (req) => {
     }
 }
 
+// Keep in mind req.body is an array of books
 export const post: RequestHandler = async (req) => {
     try {
-        const new_user = JSON.parse(req.body.toString());
-        await User.replaceOne({ name: req.locals.user }, new_user).exec();
-        return {
-            status: 200
+        const res = await User.updateOne({ name: req.locals.user }, { books: req.body }).exec();
+        console.log(res.modified);
+        switch (res.nModified) {
+            case 0: {
+                return {
+                    status: 404
+                }
+            }
+            default: {
+                return {
+                    status: 200
+                }
+            }
         }
     } catch (e) {
         console.log(e);
@@ -67,7 +77,7 @@ export const put: RequestHandler = async (req) => {
         await user.save();
         return {
             status: 200,
-            body: JSON.stringify(obj)
+            body: JSON.stringify(obj.books)
         }
     } catch (e) {
         console.log(e);
