@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	export const load: Load = async function ({ page, fetch, session, context }) {
-		const url: string = 'api/books/current';
+		const url: string = '/user/books';
 		const res = await fetch(url);
 
 		if (res.ok) {
 			return {
 				props: {
-					current: await res.json()
+					books: await res.json()
 				}
 			};
 		}
@@ -21,35 +21,32 @@
 
 <script lang="ts">
 	interface Book {
-		content: string;
-		prev_chapter: string;
-		next_chapter: string;
+		url: string;
+		name: string;
+		content: {
+			type: string;
+			value: string;
+		};
+		nextChapter: {
+			type: string;
+			value: string;
+		};
+		prevChapter: {
+			type: string;
+			value: string;
+		};
 	}
-	export let book: Book;
+	export let books: Book[];
+	$: console.log(books);
 </script>
 
-<div id="content">
-	<div id="book">
-		{book.content}
+{#each books as book}
+	<div>Title: {book.name}</div>
+	<div>Sourced from: {book.url}</div>
+	<div>
+		OPTIONS:
+		<div>content: {book.content.value}</div>
+		<div>nextchapter: {book.nextChapter.value}</div>
+		<div>prevChapter: {book.prevChapter.value}</div>
 	</div>
-	<nav id="nav">
-		<a href={book.prev_chapter} id="prev_chapter">Prev</a>
-		<a href={book.next_chapter} id="next_chapter">Next</a>
-	</nav>
-	<!-- <div id="theme-circle">
-		<select name="theme" id="theme">
-			<option value="gruvbox-material-light" selected>Gruvbox Material Light</option>
-			<option value="gruvbox-material-dark">Gruvbox Material Dark</option>
-			<option value="solarized-light">Solarized Light</option>
-			<option value="solarized-dark">Solarized Dark</option>
-		</select>
-		<span>
-			<span>&nbsp;</span>
-			<span>&nbsp;</span>
-			<span>&nbsp;</span>
-			<span>&nbsp;</span>
-			<span>&nbsp;</span>
-			<span>&nbsp;</span>
-		</span>
-	</div> -->
-</div>
+{/each}
