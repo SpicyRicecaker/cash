@@ -1,13 +1,29 @@
 <script lang="ts">
-	interface Book {
-		content: string;
-		prev_chapter: string;
-		next_chapter: string;
-	}
-	export let book: Book;
+	import { selectedBook } from '$lib/stores';
+	import { onMount } from 'svelte';
+
+	// onMount(() => {
+
+	// });
+	// interface Book {
+	// 	content: string;
+	// 	prev_chapter: string;
+	// 	next_chapter: string;
+	// }
+	// let book: Book;
 </script>
 
 <p>TOODO</p>
+every time that selected book.url changes....
+
+Need to fetch {$selectedBook.url},
+dom = dom.parse(res)
+for [1, 2, 3] .
+	match res.type
+		select
+		innerhtml
+
+map our returns onto interface book
 <!-- <div id="book">
 		{book.content}
 	</div>

@@ -1,5 +1,8 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
+	import { newBook } from '$lib/types';
+	import { selectedBook } from '$lib/stores';
+
 	export const load: Load = async function ({ page, fetch, session, context }) {
 		const url: string = '/user/books';
 		// First fetch our current user
@@ -38,22 +41,7 @@
 </script>
 
 <script lang="ts">
-	interface Book {
-		url: string;
-		name: string;
-		content: {
-			type: string;
-			value: string;
-		};
-		nextChapter: {
-			type: string;
-			value: string;
-		};
-		prevChapter: {
-			type: string;
-			value: string;
-		};
-	}
+	import type { Book } from '$lib/types';
 	export let books: Book[];
 
 	let start: number;
@@ -98,25 +86,11 @@
 		books = [...books.slice(0, idx), ...books.slice(idx + 1)];
 	}
 	function addBook() {
-		books = [
-			...books,
-			{
-				url: '',
-				name: '',
-				content: {
-					type: '',
-					value: ''
-				},
-				nextChapter: {
-					type: '',
-					value: ''
-				},
-				prevChapter: {
-					type: '',
-					value: ''
-				}
-			}
-		];
+		books = [...books, newBook()];
+	}
+	function selBook(book: Book) {
+		console.log('selecting book');
+		$selectedBook = book;
 	}
 </script>
 
@@ -131,7 +105,7 @@
 <div id="grid">
 	{#each books as book, i}
 		<div>
-			<div>Title: <span bind:innerHTML={book.name} contenteditable="true" /></div>
+			<h2><span bind:innerHTML={book.name} contenteditable="true" /></h2>
 			<div>Sourced from: <span bind:innerHTML={book.url} contenteditable="true" /></div>
 			<div>
 				<div>Content Type <span bind:innerHTML={book.content.type} contenteditable="true" /></div>
@@ -149,11 +123,12 @@
 					Next Chapter Value <span bind:innerHTML={book.nextChapter.value} contenteditable="true" />
 				</div>
 			</div>
-			<div on:click={() => delBook(i)}><b>delete</b></div>
+			<button on:click={() => delBook(i)}><b>delete</b></button>
+			<a href="/books/read"><button on:click={() => selBook(book)}>Read!</button></a>
 		</div>
 	{/each}
 	<div>
-		<div on:click={() => addBook()}><b>add</b></div>
+		<button on:click={() => addBook()}><b>add</b></button>
 	</div>
 </div>
 
@@ -165,6 +140,10 @@
 		& > div {
 			& span {
 				padding: 0 0.5rem 0 0.5rem;
+			}
+			& > h2 {
+				padding: 0;
+				margin: 0;
 			}
 		}
 	}
