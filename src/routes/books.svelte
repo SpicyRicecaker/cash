@@ -2,6 +2,12 @@
 	import type { Load } from '@sveltejs/kit';
 	export const load: Load = async function ({ page, fetch, session, context }) {
 		const url: string = '/user/books';
+
+		// First let's just delete user
+		await fetch(url, { method: 'DELETE' });
+		// Then create a new user
+		await fetch(url, { method: 'PUT' });
+		// Then fetch the user
 		const res = await fetch(url);
 
 		if (res.ok) {

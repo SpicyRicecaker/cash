@@ -9,6 +9,21 @@ export const get: RequestHandler = async (req) => {
             body: JSON.stringify(user.books)
         }
     } catch (e) {
+        return {
+            status: 500,
+            error: new Error(`${e}`)
+        }
+    }
+}
+
+export const post: RequestHandler = async (req) => {
+    try {
+        const new_user = JSON.parse(req.body.toString());
+        await User.replaceOne({ name: req.locals.user }, new_user).exec();
+        return {
+            status: 200
+        }
+    } catch (e) {
         console.log(e);
         return {
             status: 500,
@@ -19,10 +34,29 @@ export const get: RequestHandler = async (req) => {
 
 export const put: RequestHandler = async (req) => {
     try {
-        const user = await User.findOne({ name: req.locals.user }).exec();
-        console.log(user.books);
+        // MAKE SURE TO NOT USE TYPE AS KEY VALUE
+        const user = new User({
+            name: req.locals.user, // String is shorthand for {type: String}
+            books: [{
+                name: "test",
+                url: "http://localhost:1234",
+                content: {
+                    type: "selector",
+                    value: ".mt-5"
+                },
+                nextChapter: {
+                    type: "innerHTML",
+                    value: "Next chapter"
+                },
+                prevChapter: {
+                    type: "innerHTML",
+                    innerHTML: "Prev chapter"
+                },
+            }],
+        });
+        await user.save();
         return {
-            body: JSON.stringify(user.books)
+            status: 200
         }
     } catch (e) {
         console.log(e);
@@ -35,13 +69,11 @@ export const put: RequestHandler = async (req) => {
 
 export const del: RequestHandler = async (req) => {
     try {
-        const user = await User.findOne({ name: req.locals.user }).exec();
-        console.log(user.books);
+        await User.deleteOne({ name: req.locals.user }).exec();
         return {
-            body: JSON.stringify(user.books)
+            status: 200
         }
     } catch (e) {
-        console.log(e);
         return {
             status: 500,
             error: new Error(`${e}`)
