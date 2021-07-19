@@ -32,38 +32,3 @@ const userSchema = new Schema({
 });
 
 export const User = mongoose.model('User', userSchema);
-
-// db.once('open', function () {
-//     User.find({ name: 'SpicyRicecaker' }, (err, person) => {
-//         if (err) return console.error(err);
-//         console.log("success!", person[0].books);
-//     });
-//     we're connected!
-//     const user = new User({
-//         name: "SpicyRicecaker", // String is shorthand for {type: String}
-//         books: [{
-//             name: "test",
-//             url: ip,
-//             content: {
-//                 type: "selector",
-//                 value: ".mt-5"
-//             },
-//             nextChapter: {
-//                 type: "innerHTML",
-//                 value: "Next chapter"
-//             },
-//             prevChapter: {
-//                 type: "innerHTML",
-//                 innerHTML: "Prev chapter"
-//             },
-//         }],
-//     });
-//     user.save(function (err: Error, _user: typeof User) {
-//         if (err) return console.error(err);
-//     });
-
-//     User.find({ name: 'SpicyRicecaker' }, (err, person) => {
-//         if (err) return console.error(err);
-//         console.log("success!", person[0].books);
-//     });
-// });

@@ -2,21 +2,24 @@
 	import type { Load } from '@sveltejs/kit';
 	export const load: Load = async function ({ page, fetch, session, context }) {
 		const url: string = '/user/books';
-
-		// First let's just delete user
-		await fetch(url, { method: 'DELETE' });
-		// Then create a new user
-		await fetch(url, { method: 'PUT' });
-		// Then fetch the user
+		// First fetch our current user
 		const res = await fetch(url);
 
 		if (res.ok) {
+			// If the code is 200 = ok
 			return {
 				props: {
 					books: await res.json()
 				}
 			};
+		} else {
+			// Otherwise try creating user
+			// await fetch(url, { method: 'PUT' });
 		}
+
+		// First let's just delete user
+		// await fetch(url, { method: 'DELETE' });
+		// Then create a new user
 
 		return {
 			status: res.status,

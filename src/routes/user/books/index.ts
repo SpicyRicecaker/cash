@@ -4,9 +4,15 @@ import { User } from '$lib/db';
 export const get: RequestHandler = async (req) => {
     try {
         const user = await User.findOne({ name: req.locals.user }).exec();
-        console.log(user.books);
-        return {
-            body: JSON.stringify(user.books)
+        if (user) {
+            return {
+                body: JSON.stringify(user.books)
+            }
+        } else {
+            return {
+                status: 404,
+                body: JSON.stringify({ message: 'Not Found' })
+            }
         }
     } catch (e) {
         return {
@@ -69,9 +75,15 @@ export const put: RequestHandler = async (req) => {
 
 export const del: RequestHandler = async (req) => {
     try {
-        await User.deleteOne({ name: req.locals.user }).exec();
-        return {
-            status: 200
+        const res = await User.deleteOne({ name: req.locals.user }).exec();
+        if (res.deletedCount == 1) {
+            return {
+                status: 200
+            }
+        } else {
+            return {
+                status: 404
+            }
         }
     } catch (e) {
         return {
