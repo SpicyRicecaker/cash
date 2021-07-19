@@ -5,22 +5,32 @@
 		// First fetch our current user
 		const res = await fetch(url);
 
-		if (res.ok) {
-			// If the code is 200 = ok
-			return {
-				props: {
-					books: await res.json()
-				}
-			};
-		} else {
-			// Otherwise try creating user
-			// await fetch(url, { method: 'PUT' });
+		switch (res.status) {
+			// if ok
+			case 200: {
+				console.log('it is oko');
+				// Return res
+				return {
+					props: {
+						books: await res.json()
+					}
+				};
+			}
+			case 404: {
+				console.log("not found so we're making a new one");
+				// Otherwise try creating user
+				const resTwo = await fetch(url, { method: 'PUT' });
+				// Then
+				return {
+					props: {
+						books: await resTwo.json()
+					}
+				};
+			}
+			default: {
+				break;
+			}
 		}
-
-		// First let's just delete user
-		// await fetch(url, { method: 'DELETE' });
-		// Then create a new user
-
 		return {
 			status: res.status,
 			error: new Error(`Could not load ${url}`)

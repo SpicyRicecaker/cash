@@ -40,8 +40,10 @@ export const post: RequestHandler = async (req) => {
 
 export const put: RequestHandler = async (req) => {
     try {
-        // MAKE SURE TO NOT USE TYPE AS KEY VALUE
-        const user = new User({
+        if (req.locals.user == "") {
+            throw "Username is empty"
+        }
+        const obj = {
             name: req.locals.user, // String is shorthand for {type: String}
             books: [{
                 name: "test",
@@ -59,10 +61,13 @@ export const put: RequestHandler = async (req) => {
                     value: "Prev chapter"
                 },
             }],
-        });
+        };
+        // MAKE SURE TO NOT USE TYPE AS KEY VALUE
+        const user = new User(obj);
         await user.save();
         return {
-            status: 200
+            status: 200,
+            body: JSON.stringify(obj)
         }
     } catch (e) {
         console.log(e);
