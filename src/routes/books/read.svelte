@@ -24,13 +24,9 @@
 	});
 
 	function findInnerHTMLQuery(value: string, page: Document): string {
-		const start = performance.now();
 		const next = Array.from(page.body.querySelectorAll('*')).find(
 			(el) => el.textContent?.replace(/\s+/g, ' ') === value
 		);
-		console.log(`not using xpath ${performance.now() - start} ms`);
-		console.log(next);
-
 		if (next?.hasAttribute('href')) {
 			return (next as HTMLAnchorElement).href;
 		}
@@ -40,7 +36,6 @@
 	// $: update($selectedBook.url);
 	function findInnerHTML(value: string, page: Document): string {
 		// Search all nodes for text that contains value
-		let start = performance.now();
 		const iterator = page.evaluate(
 			`//*[text()['${value}' = normalize-space()]]`,
 			page,
@@ -49,13 +44,11 @@
 			null
 		);
 		let next = iterator.iterateNext() as HTMLElement;
-		console.log(next);
 
 		if (next) {
 			let node: HTMLElement | null = next;
 			do {
 				if (node.hasAttribute('href')) {
-					console.log(`using xpath ${performance.now() - start} ms`);
 					return (node as HTMLAnchorElement).href;
 				}
 				node = node.parentElement;
