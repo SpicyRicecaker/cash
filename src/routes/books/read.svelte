@@ -1,24 +1,13 @@
 <script lang="ts">
 	import { selectedBook, readBook } from '$lib/stores';
 	import type { Inquisitor, Book } from '$lib/types';
-	// import type { DOMPurifyI } from 'dompurify';
 	// import createDOMPurify from 'dompurify';
 	// import { JSDOM } from 'jsdom';
 	import { browser } from '$app/env';
 	import { onMount } from 'svelte';
-
-	let outsideResolve = function () {};
-	let outsideReject = function () {};
-	let parser = new Promise<DOMParser>((resolve, reject) => {
-		outsideResolve = () => resolve(new DOMParser());
-		outsideReject = () => resolve;
-	});
-	let dompurify = new Promise((resolve, reject) => {});
+	import { parser, purifySanitize } from '$lib/other';
 
 	onMount(async () => {
-		if (browser) {
-			await outsideResolve();
-		}
 		console.log($selectedBook.url);
 		update($selectedBook.url);
 	});
@@ -93,7 +82,7 @@
 
 				const page = (await parser).parseFromString(await res.text(), 'text/html');
 
-				$readBook.content = matchValue($selectedBook.content, page);
+				$readBook.content = (await purifySanitize)(matchValue($selectedBook.content, page));
 				$readBook.prevChapter = matchValue($selectedBook.prevChapter, page);
 				$readBook.nextChapter = matchValue($selectedBook.nextChapter, page);
 			}
@@ -101,15 +90,12 @@
 			console.log(e);
 		}
 	}
-	$: {
-		console.log($readBook);
-	}
 </script>
 
 <p>TOODO</p>
 <!-- every time that selected book.url changes.... Need to fetch {$selectedBook.url}, dom =
 dom.parse(res) for [1, 2, 3] . match res.type select innerhtml map our returns onto interface book -->
-<h3>{$readBook.content}</h3>
+<h3>{@html $readBook.content}</h3>
 <h3>{$readBook.prevChapter}</h3>
 <h3>{$readBook.nextChapter}</h3>
 <!-- <div id="book">
