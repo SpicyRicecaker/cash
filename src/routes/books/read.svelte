@@ -23,6 +23,20 @@
 		update($selectedBook.url);
 	});
 
+	function findInnerHTMLQuery(value: string, page: Document): string {
+		const start = performance.now();
+		const next = Array.from(page.body.querySelectorAll('*')).find(
+			(el) => el.textContent?.replace(/\s+/g, ' ') === value
+		);
+		console.log(`not using xpath ${performance.now() - start} ms`);
+		console.log(next);
+
+		if (next?.hasAttribute('href')) {
+			return (next as HTMLAnchorElement).href;
+		}
+		return '';
+	}
+
 	// $: update($selectedBook.url);
 	function findInnerHTML(value: string, page: Document): string {
 		// Search all nodes for text that contains value
@@ -35,28 +49,17 @@
 			null
 		);
 		let next = iterator.iterateNext() as HTMLElement;
-		console.log(`${performance.now() - start} ms`);
 		console.log(next);
 
-		// just turn leading spaces to zero lol
-		start = performance.now();
-		value.replace(/\s/g, '');
-		const node = Array.from(page.body.querySelectorAll('*')).find(
-			(el) => el.innerHTML.replace(/\s/g, '') === value
-		);
-		console.log(`${performance.now() - start} ms`);
-		console.log(node);
-
-		return '';
 		if (next) {
-			let parent;
+			let node: HTMLElement | null = next;
 			do {
-				console.log(next);
-				if (next.hasAttribute('href')) {
-					return (next as HTMLAnchorElement).href;
+				if (node.hasAttribute('href')) {
+					console.log(`using xpath ${performance.now() - start} ms`);
+					return (node as HTMLAnchorElement).href;
 				}
-				parent = next.parentElement;
-			} while (parent != null);
+				node = node.parentElement;
+			} while (node != null);
 		}
 		return '';
 	}
