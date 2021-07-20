@@ -1,7 +1,7 @@
 import { Book, newReadBook, ReadBook } from '$lib/types';
 import { newBook } from '$lib/types';
 
-import type { Writable, Updater } from 'svelte/store';
+import type { Writable } from 'svelte/store';
 import { writable } from 'svelte/store';
 import { browser } from '$app/env';
 
@@ -26,7 +26,8 @@ function initSelectedBook(): Writable<Book> {
     return {
         subscribe,
         set: (value: Book) => { localStorage.setItem('selectedBook', JSON.stringify(value)); set(value) },
-        update,
+        update
+        // update: (updater: Updater<Book>) => { (value: Book) => { return updater(value) } },
     };
 }
 

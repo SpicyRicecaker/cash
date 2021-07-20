@@ -6,6 +6,7 @@ export const get: RequestHandler = async (req) => {
         const user = await User.findOne({ name: req.locals.user }).exec();
         if (user) {
             return {
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(user.books)
             }
         } else {

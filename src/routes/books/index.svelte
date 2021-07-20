@@ -53,19 +53,14 @@
 	function loop(timestamp: number) {
 		elapsed = timestamp - start;
 		if (elapsed < RESPONSE_TIME) {
-			console.log('calling next');
 			// After 1000 ms of no changes update
 			window.requestAnimationFrame(loop);
 		} else {
-			console.log('sending req to database');
 			fetch('/user/books', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(books)
-			}).then((res) => {
-				console.log(res.status);
-				inUpdate = false;
-			});
+			}).finally(() => (inUpdate = false));
 		}
 	}
 
@@ -90,7 +85,6 @@
 		books = [...books, newBook()];
 	}
 	function selBook(book: Book) {
-		console.log('selecting book');
 		$selectedBook = book;
 	}
 </script>

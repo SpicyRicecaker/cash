@@ -1,28 +1,13 @@
+<script context="module" lang="ts">
+</script>
+
 <script lang="ts">
 	import { selectedBook, readBook } from '$lib/stores';
-	import type { Inquisitor, Book } from '$lib/types';
-	// import createDOMPurify from 'dompurify';
-	// import { JSDOM } from 'jsdom';
+	import type { Inquisitor } from '$lib/types';
 	import { browser } from '$app/env';
-	import { onMount } from 'svelte';
 	import { parser, purifySanitize } from '$lib/other';
 
-	onMount(async () => {
-		console.log($selectedBook.url);
-		update($selectedBook.url);
-	});
-
-	function findInnerHTMLQuery(value: string, page: Document): string {
-		const next = Array.from(page.body.querySelectorAll('*')).find(
-			(el) => el.textContent?.replace(/\s+/g, ' ') === value
-		);
-		if (next?.hasAttribute('href')) {
-			return (next as HTMLAnchorElement).href;
-		}
-		return '';
-	}
-
-	// $: update($selectedBook.url);
+	$: update($selectedBook.url);
 	function findInnerHTML(value: string, page: Document): string {
 		// Search all nodes for text that contains value
 		const iterator = page.evaluate(
@@ -32,7 +17,7 @@
 			XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
 			null
 		);
-		let next = iterator.iterateNext() as HTMLElement;
+		const next = iterator.iterateNext() as HTMLElement;
 
 		if (next) {
 			let node: HTMLElement | null = next;
@@ -74,7 +59,7 @@
 		try {
 			if (browser) {
 				// Fetch
-				const res = await fetch(url);
+				const res = await fetch(`/books/api?url=${$selectedBook.url}`);
 
 				if (!res.ok) {
 					throw res.status;
@@ -90,21 +75,24 @@
 			console.log(e);
 		}
 	}
+
+	function updateNextChapter() {
+		$selectedBook.url = $readBook.nextChapter;
+	}
+
+	function updatePrevChapter() {
+		$selectedBook.url = $readBook.prevChapter;
+	}
 </script>
 
-<p>TOODO</p>
-<!-- every time that selected book.url changes.... Need to fetch {$selectedBook.url}, dom =
-dom.parse(res) for [1, 2, 3] . match res.type select innerhtml map our returns onto interface book -->
-<h3>{@html $readBook.content}</h3>
-<h3>{$readBook.prevChapter}</h3>
-<h3>{$readBook.nextChapter}</h3>
-<!-- <div id="book">
-		{book.content}
-	</div>
-	<nav id="nav">
-		<a href={book.prev_chapter} id="prev_chapter">Prev</a>
-		<a href={book.next_chapter} id="next_chapter">Next</a>
-	</nav> -->
+<div id="book">
+	{@html $readBook.content}
+</div>
+<nav id="nav">
+	<span on:click={updatePrevChapter} id="prev_chapter">Prev</span>
+	<span on:click={updateNextChapter} id="next_chapter">Next</span>
+</nav>
+
 <!-- <div id="theme-circle">
 		<select name="theme" id="theme">
 			<option value="gruvbox-material-light" selected>Gruvbox Material Light</option>
@@ -121,3 +109,10 @@ dom.parse(res) for [1, 2, 3] . match res.type select innerhtml map our returns o
 			<span>&nbsp;</span>
 		</span>
 	</div> -->
+<style lang="scss">
+	span {
+		cursor: pointer;
+		color: blue;
+		text-decoration: underline;
+	}
+</style>
