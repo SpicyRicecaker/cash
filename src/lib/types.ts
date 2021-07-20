@@ -1,18 +1,20 @@
+export interface Inquisitor {
+    type: string,
+    value: string
+}
+
 export interface Book {
     url: string;
     name: string;
-    content: {
-        type: string;
-        value: string;
-    };
-    nextChapter: {
-        type: string;
-        value: string;
-    };
-    prevChapter: {
-        type: string;
-        value: string;
-    };
+    content: Inquisitor
+    nextChapter: Inquisitor
+    prevChapter: Inquisitor
+}
+
+export interface ReadBook {
+    content: string;
+    prevChapter: string;
+    nextChapter: string;
 }
 
 export const newBook = (): Book => (
@@ -33,3 +35,9 @@ export const newBook = (): Book => (
         }
     }
 )
+
+export const newReadBook = (): ReadBook => ({
+    content: '',
+    prevChapter: '',
+    nextChapter: ''
+})

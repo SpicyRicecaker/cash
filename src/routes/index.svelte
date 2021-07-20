@@ -22,9 +22,9 @@
 </h1>
 <!-- Large part of auth code from https://blog.hyper63.com/sveltekit-authentication/ -->
 {#if user}
-    <a href="/books">
+	<a href="/books">
 		<button>Books</button>
-    </a>
+	</a>
 	<a href="/logout">
 		<button>Logout</button>
 	</a>
