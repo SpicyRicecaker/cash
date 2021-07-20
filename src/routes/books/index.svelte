@@ -46,12 +46,13 @@
 
 	let start: number;
 	let inUpdate: boolean = false;
-	let elapsed: number = 1000;
-	$: progress = Math.min(elapsed / 1000, 1000);
+	const RESPONSE_TIME: number = 300;
+	let elapsed: number = RESPONSE_TIME;
+	$: progress = Math.min(elapsed / RESPONSE_TIME, RESPONSE_TIME);
 
 	function loop(timestamp: number) {
 		elapsed = timestamp - start;
-		if (elapsed < 1000) {
+		if (elapsed < RESPONSE_TIME) {
 			console.log('calling next');
 			// After 1000 ms of no changes update
 			window.requestAnimationFrame(loop);

@@ -40,7 +40,7 @@
 			do {
 				console.log(next);
 				if (next.hasAttribute('href')) {
-					return next.href;
+					return (next as HTMLAnchorElement).href;
 				}
 				parent = next.parentElement;
 			} while (parent != null);
