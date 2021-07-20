@@ -25,16 +25,29 @@
 
 	// $: update($selectedBook.url);
 	function findInnerHTML(value: string, page: Document): string {
-		console.log('12312312');
 		// Search all nodes for text that contains value
+		let start = performance.now();
 		const iterator = page.evaluate(
-			`//*[text()[contains(.,'${value}')]]`,
+			`//*[text()['${value}' = normalize-space()]]`,
 			page,
 			null,
 			XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
 			null
 		);
 		let next = iterator.iterateNext() as HTMLElement;
+		console.log(`${performance.now() - start} ms`);
+		console.log(next);
+
+		// just turn leading spaces to zero lol
+		start = performance.now();
+		value.replace(/\s/g, '');
+		const node = Array.from(page.body.querySelectorAll('*')).find(
+			(el) => el.innerHTML.replace(/\s/g, '') === value
+		);
+		console.log(`${performance.now() - start} ms`);
+		console.log(node);
+
+		return '';
 		if (next) {
 			let parent;
 			do {
