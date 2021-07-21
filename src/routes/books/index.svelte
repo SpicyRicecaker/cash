@@ -3,8 +3,6 @@
 	import { newBook } from '$lib/types';
 	import { selectedBook } from '$lib/stores';
 
-	let invalid: boolean = false;
-
 	export const load: Load = async function ({ page, fetch, session, context }) {
 		const url: string = '/user/books';
 		// First fetch our current user
@@ -65,6 +63,7 @@
 			}).finally(() => (inUpdate = false));
 		}
 	}
+	let booksValidator: [boolean, boolean, boolean][] = Array(books.length).fill([true, true, true]);
 
 	let first: boolean = true;
 
@@ -82,13 +81,19 @@
 	}
 	function delBook(idx: number) {
 		books = [...books.slice(0, idx), ...books.slice(idx + 1)];
+		booksValidator = [...booksValidator.slice(0, idx), ...booksValidator.slice(idx + 1)];
 	}
 	function addBook() {
 		books = [...books, newBook()];
+		booksValidator = [...booksValidator, [true, true, true]];
 	}
 	function selBook(book: Book) {
 		$selectedBook = book;
 	}
+
+	// e.g. ('innerHTML', i where i <= books.length, 0 | 1 | 2)
+	const handleTypeInputChange = (t: string, i: number, field: number) =>
+		(booksValidator[i][field] = t == 'innerHTML' || t == 'selector');
 </script>
 
 <div>
@@ -105,16 +110,30 @@
 			<h2><span bind:innerHTML={book.name} contenteditable="true" /></h2>
 			<div>Sourced from: <span bind:innerHTML={book.url} contenteditable="true" /></div>
 			<div>
-				<div>Content Type <span bind:innerHTML={book.content.type} contenteditable="true" /></div>
+				<div>
+					Content Type <input
+						on:keyup={() => handleTypeInputChange(book.content.type, i, 0)}
+						bind:value={book.content.type}
+						class={booksValidator[i][0] ? 'valid' : 'invalid'}
+					/>
+				</div>
 				<div>Content Value <span bind:innerHTML={book.content.value} contenteditable="true" /></div>
 				<div>
-					Prev Chapter Type <span bind:innerHTML={book.prevChapter.type} contenteditable="true" />
+					Prev Chapter Type <input
+						on:keyup={() => handleTypeInputChange(book.prevChapter.type, i, 1)}
+						bind:value={book.prevChapter.type}
+						class={booksValidator[i][1] ? 'valid' : 'invalid'}
+					/>
 				</div>
 				<div>
 					Prev Chapter Value <span bind:innerHTML={book.prevChapter.value} contenteditable="true" />
 				</div>
 				<div>
-					Next Chapter Type <span bind:innerHTML={book.nextChapter.type} contenteditable="true" />
+					Next Chapter Type <input
+						on:keyup={() => handleTypeInputChange(book.nextChapter.type, i, 2)}
+						bind:value={book.nextChapter.type}
+						class={booksValidator[i][2] ? 'valid' : 'invalid'}
+					/>
 				</div>
 				<div>
 					Next Chapter Value <span bind:innerHTML={book.nextChapter.value} contenteditable="true" />
@@ -143,5 +162,13 @@
 				margin: 0;
 			}
 		}
+	}
+
+	.valid {
+		background-color: lightgreen;
+	}
+
+	.invalid {
+		background-color: lightcoral;
 	}
 </style>
