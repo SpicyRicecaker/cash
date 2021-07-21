@@ -15,14 +15,13 @@ export const setup = {
     rejParser: () => { },
 };
 
-export const parser = new Promise<DOMParser>((resolve, reject) => {
+export const parser = new Promise<DOMParser>((resolve) => {
     setup.resParser = () => {
-        console.log('creating new parser');
         resolve(new DOMParser());
     };
 });
 
-export let purifySanitize = new Promise<typeof sanitize>((resolve, reject) => { });
+export let purifySanitize = new Promise<typeof sanitize>(() => { });
 
 if (browser) {
     (async () => {
