@@ -8,6 +8,10 @@
 	});
 </script>
 
+<style>
+
+</style>
+
 <script lang="ts">
 	export let user: any;
 </script>

@@ -37,3 +37,17 @@ export const readBookDefault = (): ReadBook => ({
     prevChapter: '',
     nextChapter: ''
 })
+
+export interface Theme {
+    name: string;
+    blk: string;
+    red: string;
+    grn: string;
+    yel: string;
+    blu: string;
+    mag: string;
+    cya: string;
+    wht: string;
+    foregroundColor: string;
+    backgroundColor: string;
+}

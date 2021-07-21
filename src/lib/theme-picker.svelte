@@ -1,21 +1,27 @@
+<script lang="ts">
+	import type { Theme } from '$lib/types';
+	export let selected: string;
+	export let themes: Theme[];
+</script>
+
 <div id="theme-circle">
-	<select name="theme" id="theme">
-		<option value="gruvbox-material-light" selected>Gruvbox Material Light</option>
-		<option value="gruvbox-material-dark">Gruvbox Material Dark</option>
-		<option value="solarized-light">Solarized Light</option>
-		<option value="solarized-dark">Solarized Dark</option>
+	<select name="theme" id="theme" bind:value={selected}>
+		{#each themes as theme}
+			<option value={theme.name}>{theme.name}</option>
+		{/each}
 	</select>
 	<span>
-		<span>&nbsp;</span>
-		<span>&nbsp;</span>
-		<span>&nbsp;</span>
-		<span>&nbsp;</span>
-		<span>&nbsp;</span>
-		<span>&nbsp;</span>
+		{#each Array(6) as _}
+			<span>&nbsp;</span>
+		{/each}
 	</span>
 </div>
 
 <style lang="scss">
+	// #pallette {
+	// 	background-color: var(--blk);
+	// 	color: var(--wht);
+	// }
 	#theme-circle {
 		display: flex;
 		// text-align: center;
