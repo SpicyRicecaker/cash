@@ -8,6 +8,22 @@
 	import { parser, purifySanitize } from '$lib/other';
 
 	$: update($selectedBook.url);
+	function findInnerHTMLQuery(value: string, page: Document): string {
+		const next = Array.from(page.body.querySelectorAll('*')).find(
+			(el) => el.innerHTML.replace(/\s+/g, ' ') === value
+		);
+		if (next) {
+			let node: HTMLElement | null = next as HTMLElement;
+			do {
+				if (node.hasAttribute('href')) {
+					return (node as HTMLAnchorElement).href;
+				}
+				node = node.parentElement;
+			} while (node != null);
+		}
+		return '';
+	}
+
 	function findInnerHTML(value: string, page: Document): string {
 		// Search all nodes for text that contains value
 		const iterator = page.evaluate(
@@ -44,7 +60,8 @@
 		// first match selector
 		switch (inquisitor.type) {
 			case 'innerHTML': {
-				return findInnerHTML(inquisitor.value, page);
+				// return findInnerHTML(inquisitor.value, page);
+				return findInnerHTMLQuery(inquisitor.value, page);
 			}
 			case 'selector': {
 				return findSelector(inquisitor.value, page);
@@ -70,18 +87,34 @@
 				$readBook.content = (await purifySanitize)(matchValue($selectedBook.content, page));
 				$readBook.prevChapter = matchValue($selectedBook.prevChapter, page);
 				$readBook.nextChapter = matchValue($selectedBook.nextChapter, page);
+				console.log($readBook.prevChapter);
+				console.log($readBook.nextChapter);
 			}
 		} catch (e) {
 			console.log(e);
 		}
 	}
 
+	async function updateUrl() {
+		// Send request to server
+		await fetch('/user/book-individual', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				name: $selectedBook.name,
+				newUrl: $selectedBook.url
+			})
+		});
+	}
+
 	function updateNextChapter() {
 		$selectedBook.url = $readBook.nextChapter;
+		updateUrl();
 	}
 
 	function updatePrevChapter() {
 		$selectedBook.url = $readBook.prevChapter;
+		updateUrl();
 	}
 </script>
 
@@ -89,8 +122,12 @@
 	{@html $readBook.content}
 </div>
 <nav id="nav">
-	<span on:click={updatePrevChapter} id="prev_chapter">Prev</span>
-	<span on:click={updateNextChapter} id="next_chapter">Next</span>
+	{#if $readBook.prevChapter}
+		<span on:click={updatePrevChapter} id="prev_chapter">Prev</span>
+	{/if}
+	{#if $readBook.nextChapter}
+		<span on:click={updateNextChapter} id="next_chapter">Next</span>
+	{/if}
 </nav>
 
 <!-- <div id="theme-circle">

@@ -5,7 +5,6 @@ export const get: RequestHandler = async (req) => {
         const url = req.query.get('url');
 
         if (url) {
-            console.log('expensive call');
             const res = await fetch(url);
             if (res.ok) {
                 return {

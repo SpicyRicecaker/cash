@@ -27,7 +27,6 @@ export const get: RequestHandler = async (req) => {
 export const post: RequestHandler = async (req) => {
     try {
         const res = await User.updateOne({ name: req.locals.user }, { books: req.body }).exec();
-        console.log(res.modified);
         switch (res.nModified) {
             case 0: {
                 return {

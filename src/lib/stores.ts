@@ -25,7 +25,11 @@ function initSelectedBook(): Writable<Book> {
 
     return {
         subscribe,
-        set: (value: Book) => { localStorage.setItem('selectedBook', JSON.stringify(value)); set(value) },
+        set: (value: Book) => {
+            // Update local storage
+            localStorage.setItem('selectedBook', JSON.stringify(value));
+            set(value);
+        },
         update
         // update: (updater: Updater<Book>) => { (value: Book) => { return updater(value) } },
     };
