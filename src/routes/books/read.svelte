@@ -8,22 +8,6 @@
 	import { parser, purifySanitize } from '$lib/other';
 
 	$: update($selectedBook.url);
-	function findInnerHTMLQuery(value: string, page: Document): string {
-		const next = Array.from(page.body.querySelectorAll('*')).find(
-			(el) => el.innerHTML.replace(/\s+/g, ' ') === value
-		);
-		if (next) {
-			let node: HTMLElement | null = next as HTMLElement;
-			do {
-				if (node.hasAttribute('href')) {
-					return (node as HTMLAnchorElement).href;
-				}
-				node = node.parentElement;
-			} while (node != null);
-		}
-		return '';
-	}
-
 	function findInnerHTML(value: string, page: Document): string {
 		// Search all nodes for text that contains value
 		const iterator = page.evaluate(
@@ -61,7 +45,7 @@
 		switch (inquisitor.type) {
 			case 'innerHTML': {
 				// return findInnerHTML(inquisitor.value, page);
-				return findInnerHTMLQuery(inquisitor.value, page);
+				return findInnerHTML(inquisitor.value, page);
 			}
 			case 'selector': {
 				return findSelector(inquisitor.value, page);

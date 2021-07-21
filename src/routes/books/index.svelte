@@ -3,6 +3,8 @@
 	import { newBook } from '$lib/types';
 	import { selectedBook } from '$lib/stores';
 
+	let invalid: boolean = false;
+
 	export const load: Load = async function ({ page, fetch, session, context }) {
 		const url: string = '/user/books';
 		// First fetch our current user
