@@ -50,34 +50,41 @@ export const post: RequestHandler = async (req) => {
 
 export const put: RequestHandler = async (req) => {
     try {
+        // Add new book to user and return it
         if (req.locals.user == "") {
             throw "Username is empty"
         }
-        const obj = {
-            name: req.locals.user, // String is shorthand for {type: String}
-            books: [{
-                name: "test",
-                url: "http://localhost:1234",
-                content: {
-                    type: "selector",
-                    value: ".mt-5"
-                },
-                nextChapter: {
-                    type: "innerHTML",
-                    value: "Next chapter"
-                },
-                prevChapter: {
-                    type: "innerHTML",
-                    value: "Prev chapter"
-                },
-            }],
+        const book = {
+            name: "test",
+            url: "http://localhost:1234",
+            content: {
+                type: "selector",
+                value: ".mt-5"
+            },
+            nextChapter: {
+                type: "innerHTML",
+                value: "Next chapter"
+            },
+            prevChapter: {
+                type: "innerHTML",
+                value: "Prev chapter"
+            },
         };
-        // MAKE SURE TO NOT USE TYPE AS KEY VALUE
-        const user = new User(obj);
-        await user.save();
-        return {
-            status: 200,
-            body: JSON.stringify(obj.books)
+        // First get the user
+        const res = User.updateOne({ name: req.locals.user }, { $push: { books: book } });
+        switch (res.nModified) {
+            case 0: {
+                return {
+                    status: 204,
+                    body: JSON.stringify(book)
+                }
+            }
+            default: {
+                return {
+                    status: 200,
+                    body: JSON.stringify(book)
+                }
+            }
         }
     } catch (e) {
         console.log(e);

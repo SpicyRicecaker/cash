@@ -1,6 +1,3 @@
-<script context="module" lang="ts">
-</script>
-
 <script lang="ts">
 	import { selectedBook, readBook } from '$lib/stores';
 	import type { Inquisitor } from '$lib/types';

@@ -4,8 +4,8 @@
 	import { selectedBook } from '$lib/stores';
 
 	export const load: Load = async function ({ page, fetch, session, context }) {
-		const url: string = '/user/books';
 		// First fetch our current user
+		const url: string = '/user/books';
 		const res = await fetch(url);
 
 		switch (res.status) {
@@ -18,16 +18,16 @@
 					}
 				};
 			}
-			case 404: {
-				// Otherwise try creating user
-				const resTwo = await fetch(url, { method: 'PUT' });
-				// Then
-				return {
-					props: {
-						books: await resTwo.json()
-					}
-				};
-			}
+			// Shouldn't ever 404 i don't think
+			// case 404: {
+			// 	// const resTwo = await fetch('', { method: 'PUT' });
+			// 	// Then
+			// 	return {
+			// 		props: {
+			// 			books: []
+			// 		}
+			// 	};
+			// }
 			default: {
 				break;
 			}
@@ -55,6 +55,7 @@
 			// After 1000 ms of no changes update
 			window.requestAnimationFrame(loop);
 		} else {
+			console.log('sending');
 			fetch('/user/books', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -62,7 +63,12 @@
 			}).finally(() => (inUpdate = false));
 		}
 	}
-	let booksValidator: [boolean, boolean, boolean][] = Array(books.length).fill([true, true, true]);
+	let booksValidator: [boolean, boolean, boolean, boolean][] = Array(books.length).fill([
+		true,
+		true,
+		true,
+		false
+	]);
 
 	let first: boolean = true;
 
@@ -84,7 +90,7 @@
 	}
 	function addBook() {
 		books = [...books, bookDefault()];
-		booksValidator = [...booksValidator, [true, true, true]];
+		booksValidator = [...booksValidator, [true, true, true, false]];
 	}
 	function selBook(book: Book) {
 		$selectedBook = book;
@@ -101,7 +107,7 @@
 	</div>
 	<div id="grid">
 		{#each books as book, i}
-			<div>
+			<div class="book">
 				<h2><span bind:innerHTML={book.name} contenteditable="true" /></h2>
 				<div>Sourced from: <span bind:innerHTML={book.url} contenteditable="true" /></div>
 				<div>
@@ -142,12 +148,12 @@
 						/>
 					</div>
 				</div>
-				<button on:click={() => delBook(i)}><b>delete</b></button>
+				<button on:click={() => delBook(i)}>delete</button>
 				<a href="/books/read"><button on:click={() => selBook(book)}>Read!</button></a>
 			</div>
 		{/each}
 		<div>
-			<button on:click={() => addBook()}><b>add</b></button>
+			<button on:click={() => addBook()}>add</button>
 		</div>
 	</div>
 </div>
@@ -157,7 +163,8 @@
 		display: grid;
 		grid-gap: 1rem;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		& > div {
+		& > .book {
+			background-color: var(--yel);
 			& span {
 				padding: 0 0.5rem 0 0.5rem;
 			}
@@ -182,11 +189,9 @@
 			box-shadow: 0 0 0.2rem gray;
 		}
 		&.valid {
-			// background-color: var(--grn);
 			border-color: var(--grn);
 		}
 		&.invalid {
-			// background-color: var(--red);
 			border-color: var(--red);
 		}
 	}

@@ -59,19 +59,6 @@
 		}
 	];
 
-	// function updateThemeOnIndex() {
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// 	root.style.setProperty('--blk', themes[selected].blk);
-	// }
-
 	let updateThemeOnIndex = (_: string) => {};
 
 	let root: HTMLElement;

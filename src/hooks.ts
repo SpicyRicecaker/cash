@@ -29,6 +29,4 @@ export const handle: Handle = async function ({ request, resolve }) {
 
 // This getSession returns a `session` object that is accessible on the client
 // Keep in mind that cookies are stored on server
-export const getSession: GetSession = async (request) => {
-    return { user: request.locals.user }
-}
+export const getSession: GetSession = async (request) => ({ user: request.locals.user })
