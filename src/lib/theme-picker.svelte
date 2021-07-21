@@ -18,10 +18,10 @@
 </div>
 
 <style lang="scss">
-	// #pallette {
-	// 	background-color: var(--blk);
-	// 	color: var(--wht);
-	// }
+	#theme {
+		background-color: var(--blk);
+		color: var(--wht);
+	}
 	#theme-circle {
 		display: flex;
 		// text-align: center;

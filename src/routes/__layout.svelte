@@ -100,8 +100,12 @@
 	});
 </script>
 
-<slot />
-<ThemePicker {themes} bind:selected />
+<main>
+	<slot />
+	<div>
+		<ThemePicker {themes} bind:selected />
+	</div>
+</main>
 
 <style lang="scss">
 	:global(body) {
@@ -112,10 +116,18 @@
 		height: 100%;
 
 		// Default color
-		background-color: #292828;
+		font-family: Helvetica, sans-serif;
+		background-color: var(--background-color);
+		color: var(--foreground-color);
 
 		// Animations
 		transition: 1s;
+	}
+
+	div {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
 	}
 
 	// :global(span) {
