@@ -96,12 +96,12 @@
 </script>
 
 <div>
-	{#if inUpdate}
-		<div>Updating...</div>
-	{:else}
-		<div>Up to date!</div>
-	{/if}
-	<progress value={progress} />
+	<!-- {#if inUpdate} -->
+	<!-- <div>Updating...</div> -->
+	<progress class={inUpdate ? 'progressing' : 'regressing'} value={progress} />
+	<!-- {:else} -->
+	<!-- <div>Up to date!</div> -->
+	<!-- {/if} -->
 </div>
 <div id="grid">
 	{#each books as book, i}
@@ -162,12 +162,39 @@
 			}
 		}
 	}
-
-	.valid {
-		background-color: lightgreen;
+	input {
+		outline: none;
+		border: 0.1rem solid gainsboro;
+		padding: 1rem;
+		border-radius: 2rem;
+		color: var(--foreground-color);
+		background-color: var(--background-color);
+		transition: 0.2s;
+		border: 0.1rem solid gray;
+		/* border: 2px inset; */
+		&:focus {
+			border: 0.1rem solid #ababab;
+			box-shadow: 0 0 0.2rem gray;
+		}
+		&.valid {
+			// background-color: var(--grn);
+			border-color: var(--grn);
+		}
+		&.invalid {
+			// background-color: var(--red);
+			border-color: var(--red);
+		}
 	}
-
-	.invalid {
-		background-color: lightcoral;
+	progress {
+		display: block;
+		width: 100%;
+		padding: 0;
+		margin: 0;
+		&.progressing {
+			visibility: visible;
+		}
+		&.regressing {
+			visibility: hidden;
+		}
 	}
 </style>
