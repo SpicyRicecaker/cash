@@ -96,54 +96,59 @@
 </script>
 
 <div>
-	<!-- {#if inUpdate} -->
-	<!-- <div>Updating...</div> -->
-	<progress class={inUpdate ? 'progressing' : 'regressing'} value={progress} />
-	<!-- {:else} -->
-	<!-- <div>Up to date!</div> -->
-	<!-- {/if} -->
-</div>
-<div id="grid">
-	{#each books as book, i}
-		<div>
-			<h2><span bind:innerHTML={book.name} contenteditable="true" /></h2>
-			<div>Sourced from: <span bind:innerHTML={book.url} contenteditable="true" /></div>
-			<div>
-				<div>
-					Content Type <input
-						on:keyup={() => handleTypeInputChange(book.content.type, i, 0)}
-						bind:value={book.content.type}
-						class={booksValidator[i][0] ? 'valid' : 'invalid'}
-					/>
-				</div>
-				<div>Content Value <span bind:innerHTML={book.content.value} contenteditable="true" /></div>
-				<div>
-					Prev Chapter Type <input
-						on:keyup={() => handleTypeInputChange(book.prevChapter.type, i, 1)}
-						bind:value={book.prevChapter.type}
-						class={booksValidator[i][1] ? 'valid' : 'invalid'}
-					/>
-				</div>
-				<div>
-					Prev Chapter Value <span bind:innerHTML={book.prevChapter.value} contenteditable="true" />
-				</div>
-				<div>
-					Next Chapter Type <input
-						on:keyup={() => handleTypeInputChange(book.nextChapter.type, i, 2)}
-						bind:value={book.nextChapter.type}
-						class={booksValidator[i][2] ? 'valid' : 'invalid'}
-					/>
-				</div>
-				<div>
-					Next Chapter Value <span bind:innerHTML={book.nextChapter.value} contenteditable="true" />
-				</div>
-			</div>
-			<button on:click={() => delBook(i)}><b>delete</b></button>
-			<a href="/books/read"><button on:click={() => selBook(book)}>Read!</button></a>
-		</div>
-	{/each}
 	<div>
-		<button on:click={() => addBook()}><b>add</b></button>
+		<progress class={inUpdate ? 'progressing' : 'regressing'} value={progress} />
+	</div>
+	<div id="grid">
+		{#each books as book, i}
+			<div>
+				<h2><span bind:innerHTML={book.name} contenteditable="true" /></h2>
+				<div>Sourced from: <span bind:innerHTML={book.url} contenteditable="true" /></div>
+				<div>
+					<div>
+						Content Type <input
+							on:keyup={() => handleTypeInputChange(book.content.type, i, 0)}
+							bind:value={book.content.type}
+							class={booksValidator[i][0] ? 'valid' : 'invalid'}
+						/>
+					</div>
+					<div>
+						Content Value <span bind:innerHTML={book.content.value} contenteditable="true" />
+					</div>
+					<div>
+						Prev Chapter Type <input
+							on:keyup={() => handleTypeInputChange(book.prevChapter.type, i, 1)}
+							bind:value={book.prevChapter.type}
+							class={booksValidator[i][1] ? 'valid' : 'invalid'}
+						/>
+					</div>
+					<div>
+						Prev Chapter Value <span
+							bind:innerHTML={book.prevChapter.value}
+							contenteditable="true"
+						/>
+					</div>
+					<div>
+						Next Chapter Type <input
+							on:keyup={() => handleTypeInputChange(book.nextChapter.type, i, 2)}
+							bind:value={book.nextChapter.type}
+							class={booksValidator[i][2] ? 'valid' : 'invalid'}
+						/>
+					</div>
+					<div>
+						Next Chapter Value <span
+							bind:innerHTML={book.nextChapter.value}
+							contenteditable="true"
+						/>
+					</div>
+				</div>
+				<button on:click={() => delBook(i)}><b>delete</b></button>
+				<a href="/books/read"><button on:click={() => selBook(book)}>Read!</button></a>
+			</div>
+		{/each}
+		<div>
+			<button on:click={() => addBook()}><b>add</b></button>
+		</div>
 	</div>
 </div>
 
@@ -196,5 +201,13 @@
 		&.regressing {
 			visibility: hidden;
 		}
+	}
+
+	button {
+		border: none;
+		text-decoration: none;
+		padding: 1rem;
+		color: var(--background-color);
+		background-color: var(--foreground-color);
 	}
 </style>
