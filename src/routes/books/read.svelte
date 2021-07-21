@@ -100,22 +100,55 @@
 	}
 </script>
 
-<div id="book">
-	{@html $readBook.content}
+<div id="content">
+	<div id="book">
+		{@html $readBook.content}
+	</div>
+	<nav id="nav">
+		{#if $readBook.prevChapter}
+			<span on:click={updatePrevChapter} id="prev_chapter">Prev</span>
+		{/if}
+		{#if $readBook.nextChapter}
+			<span on:click={updateNextChapter} id="next_chapter">Next</span>
+		{/if}
+	</nav>
 </div>
-<nav id="nav">
-	{#if $readBook.prevChapter}
-		<span on:click={updatePrevChapter} id="prev_chapter">Prev</span>
-	{/if}
-	{#if $readBook.nextChapter}
-		<span on:click={updateNextChapter} id="next_chapter">Next</span>
-	{/if}
-</nav>
 
 <style lang="scss">
-	span {
-		cursor: pointer;
-		color: blue;
-		text-decoration: underline;
+	#content {
+		background-color: var(--background-color);
+		color: var(--foreground-color);
+		a {
+			color: var(--foreground-color);
+			&:active {
+				color: var(--red);
+			}
+		}
 	}
+
+	// Used media queries from https://getbootstrap.com/docs/3.4/css/
+	$screen-sm-min: 768px;
+	$screen-md-min: 992px;
+	$screen-lg-min: 1200px;
+
+	@media (min-width: $screen-sm-min) {
+		#content {
+			max-width: none;
+		}
+	}
+	@media (min-width: $screen-md-min) {
+		#content {
+			max-width: 50%;
+		}
+	}
+	@media (min-width: $screen-lg-min) {
+		#content {
+			max-width: 30%;
+		}
+	}
+	// span {
+	// 	cursor: pointer;
+	// 	color: blue;
+	// 	text-decoration: underline;
+	// }
 </style>
