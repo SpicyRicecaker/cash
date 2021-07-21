@@ -1,5 +1,5 @@
-import { Book, newReadBook, ReadBook } from '$lib/types';
-import { newBook } from '$lib/types';
+import { Book, readBookDefault, ReadBook } from '$lib/types';
+import { bookDefault } from '$lib/types';
 
 import type { Writable } from 'svelte/store';
 import { writable } from 'svelte/store';
@@ -14,11 +14,11 @@ function initSelectedBook(): Writable<Book> {
         if (bookString) {
             book = JSON.parse(bookString);
         } else {
-            book = newBook();
+            book = bookDefault();
             localStorage.setItem('selectedBook', JSON.stringify(book));
         }
     } else {
-        book = newBook();
+        book = bookDefault();
     }
     // && browser
     const { subscribe, set, update } = writable(book);
@@ -35,4 +35,4 @@ function initSelectedBook(): Writable<Book> {
     };
 }
 
-export const readBook: Writable<ReadBook> = writable(newReadBook());
+export const readBook: Writable<ReadBook> = writable(readBookDefault());

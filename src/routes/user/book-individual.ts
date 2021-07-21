@@ -2,16 +2,16 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { User } from '$lib/db';
 
 interface NewUpdate {
-    name: string
+    _id: string
     newUrl: string,
 }
 
 export const post: RequestHandler = async (req) => {
     try {
-        const name = (req.body as unknown as NewUpdate).name;
+        const _id = (req.body as unknown as NewUpdate)._id;
         const newUrl = (req.body as unknown as NewUpdate).newUrl;
-        if (name && newUrl) {
-            const res = await User.updateOne({ name: req.locals.user, 'books.name': name }, { $set: { "books.$.url": newUrl } }).exec();
+        if (_id && newUrl) {
+            const res = await User.updateOne({ name: req.locals.user, 'books._id': _id }, { $set: { "books.$.url": newUrl } }).exec();
             if (parseInt(res.nModified) === 1) {
                 return {
                     status: 200

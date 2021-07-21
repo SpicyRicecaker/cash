@@ -1,9 +1,13 @@
 export interface Inquisitor {
+    _id: string;
     type: string,
     value: string
 }
 
+const inquisitorDefault = (): Inquisitor => ({ _id: '', type: '', value: '' })
+
 export interface Book {
+    _id: string;
     url: string;
     name: string;
     content: Inquisitor
@@ -17,26 +21,18 @@ export interface ReadBook {
     nextChapter: string;
 }
 
-export const newBook = (): Book => (
+export const bookDefault = (): Book => (
     {
+        _id: '',
         url: '',
         name: '',
-        content: {
-            type: '',
-            value: ''
-        },
-        nextChapter: {
-            type: '',
-            value: ''
-        },
-        prevChapter: {
-            type: '',
-            value: ''
-        }
+        content: inquisitorDefault(),
+        nextChapter: inquisitorDefault(),
+        prevChapter: inquisitorDefault()
     }
 )
 
-export const newReadBook = (): ReadBook => ({
+export const readBookDefault = (): ReadBook => ({
     content: '',
     prevChapter: '',
     nextChapter: ''

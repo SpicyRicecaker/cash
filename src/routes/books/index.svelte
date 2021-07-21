@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import { newBook } from '$lib/types';
+	import { bookDefault } from '$lib/types';
 	import { selectedBook } from '$lib/stores';
 
 	export const load: Load = async function ({ page, fetch, session, context }) {
@@ -19,7 +19,6 @@
 				};
 			}
 			case 404: {
-				console.log('Welcome New User!');
 				// Otherwise try creating user
 				const resTwo = await fetch(url, { method: 'PUT' });
 				// Then
@@ -84,7 +83,7 @@
 		booksValidator = [...booksValidator.slice(0, idx), ...booksValidator.slice(idx + 1)];
 	}
 	function addBook() {
-		books = [...books, newBook()];
+		books = [...books, bookDefault()];
 		booksValidator = [...booksValidator, [true, true, true]];
 	}
 	function selBook(book: Book) {

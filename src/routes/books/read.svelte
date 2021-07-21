@@ -60,7 +60,7 @@
 		try {
 			if (browser) {
 				// Fetch
-				const res = await fetch(`/books/api?url=${$selectedBook.url}`);
+				const res = await fetch(`/books/api?url=${url}`);
 
 				if (!res.ok) {
 					throw res.status;
@@ -83,7 +83,7 @@
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				name: $selectedBook.name,
+				_id: $selectedBook._id,
 				newUrl: $selectedBook.url
 			})
 		});
