@@ -3,7 +3,7 @@
 	import type { Theme } from '$lib/types';
 	import { onMount } from 'svelte';
 	// Define some color themes here probably
-	let selected: string = 'Gruvbox Material Dark';
+	let selected: string;
 	const themes: Theme[] = [
 		{
 			name: 'Gruvbox Material Light',
@@ -30,6 +30,32 @@
 			wht: '#d4be98',
 			foregroundColor: '#d4be98',
 			backgroundColor: '#292828'
+		},
+		{
+			name: 'Solarized Light',
+			blk: '#657b83',
+			red: '#dc322f',
+			grn: '#859900',
+			yel: '#b58900',
+			blu: '#268bd2',
+			mag: '#d33682',
+			cya: '#2aa198',
+			wht: '#fdf6e3',
+			foregroundColor: '#657b83',
+			backgroundColor: '#fdf6e3'
+		},
+		{
+			name: 'Solarized Dark',
+			blk: '#839496',
+			red: '#ea6962',
+			grn: '#a9b665',
+			yel: '#d8a657',
+			blu: '#7daea3',
+			mag: '#d3869b',
+			cya: '#89b482',
+			wht: '#002b36',
+			foregroundColor: '#002b36',
+			backgroundColor: '#839496'
 		}
 	];
 
@@ -52,8 +78,8 @@
 	$: updateThemeOnIndex(selected);
 	onMount(() => {
 		root = document.documentElement;
+		selected = localStorage.getItem('theme') || 'Gruvbox Material Dark';
 		updateThemeOnIndex = (name: string) => {
-			console.log('12312313');
 			let idx = themes.find((el) => el.name == name);
 			if (idx) {
 				root.style.setProperty('--blk', idx.blk);
@@ -66,6 +92,8 @@
 				root.style.setProperty('--wht', idx.wht);
 				root.style.setProperty('--foreground-color', idx.foregroundColor);
 				root.style.setProperty('--background-color', idx.backgroundColor);
+				// Set local storage
+				localStorage.setItem('theme', name);
 			}
 		};
 		updateThemeOnIndex(selected);
