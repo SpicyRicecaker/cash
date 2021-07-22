@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { User } from '$lib/db';
+import type { Book } from '$lib/types';
 
 export const get: RequestHandler = async (req) => {
     try {
@@ -23,20 +24,24 @@ export const get: RequestHandler = async (req) => {
     }
 }
 
-// Keep in mind req.body is an array of books
 export const post: RequestHandler = async (req) => {
     try {
-        const res = await User.updateOne({ name: req.locals.user }, { books: req.body }).exec();
-        switch (res.nModified) {
-            case 0: {
-                return {
-                    status: 404
-                }
-            }
-            default: {
+        const book = req.body as unknown as Book;
+        console.log('-------------------', book);
+        if (book) {
+            const res = await User.updateOne({ name: req.locals.user, 'books._id': book._id }, { $set: { "books.$": book } }).exec();
+            if (parseInt(res.nModified) === 1) {
                 return {
                     status: 200
                 }
+            } else {
+                return {
+                    status: 204
+                }
+            }
+        } else {
+            return {
+                status: 400
             }
         }
     } catch (e) {
@@ -71,13 +76,10 @@ export const put: RequestHandler = async (req) => {
             },
         };
         // First get the user
-        const res = User.updateOne({ name: req.locals.user }, { $push: { books: book } });
+        const res = User.updateOne({ name: req.locals.user }, { $push: { books: book } }).exec();
         switch (res.nModified) {
             case 0: {
-                return {
-                    status: 204,
-                    body: JSON.stringify(book)
-                }
+                throw new Error("Unable to modify document");
             }
             default: {
                 return {
