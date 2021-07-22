@@ -109,9 +109,12 @@
 			{/if}
 		{/each}
 		{#if editMode}
-			<div class="book">
+			<!-- <div class="add-book"> -->
+			<button class="add-book" on:click={() => addBook()}><div>+</div></button>
+			<!-- </div> -->
+			<!-- <div class="add">
 				<button class="add-book" on:click={() => addBook()}>+</button>
-			</div>
+			</div> -->
 		{/if}
 	</div>
 </div>
@@ -163,20 +166,48 @@
 			& > button {
 				border: none;
 				text-decoration: none;
-				z-index: 5;
 				&:hover {
 					cursor: pointer;
 				}
-				&.add-book {
-					font-size: 3rem;
-					margin: 0 auto;
-				}
+				// &.add-book {
+				// 	background-color: var(--foreground-color);
+				// 	color: var(--background-color);
+
+				// 	align-self: center;
+				// 	justify-self: center;
+
+				// 	font-size: 3rem;
+				// }
 				&.delete-book {
 					position: absolute;
 					top: 0;
 					right: 0;
 				}
 			}
+		}
+		& > .add-book {
+			min-height: 100px;
+			display: grid;
+
+			background-color: var(--foreground-color);
+			color: var(--background-color);
+
+			border: none;
+			text-decoration: none;
+			justify-content: center;
+			align-content: center;
+			// opacity: 0;
+			& > div {
+				font-size: 3rem;
+				line-height: 1.8rem;
+			}
+			&:hover {
+				cursor: pointer;
+			}
+
+			// & > span {
+			// 	just
+			// }
 		}
 	}
 	.header {
