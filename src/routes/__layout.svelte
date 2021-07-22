@@ -116,7 +116,7 @@
 		width: 100%;
 		height: 100%;
 
-		display: grid;
-		grid-template-rows: minmax(0, 1fr) auto;
+		// display: grid;
+		// grid-template-rows: minmax(0, 1fr) auto;
 	}
 </style>

@@ -27,7 +27,6 @@ export const get: RequestHandler = async (req) => {
 export const post: RequestHandler = async (req) => {
     try {
         const book = req.body as unknown as Book;
-        console.log('-------------------', book);
         if (book) {
             const res = await User.updateOne({ name: req.locals.user, 'books._id': book._id }, { $set: { "books.$": book } }).exec();
             if (parseInt(res.nModified) === 1) {
@@ -100,7 +99,7 @@ export const put: RequestHandler = async (req) => {
 export const del: RequestHandler = async (req) => {
     try {
         const _id = req.body;
-        const res = await User.deleteOne({ name: req.locals.user, 'books._id': _id }).exec();
+        const res = await User.updateOne({ name: req.locals.user }, { $pull: { "books.$._id": _id } }).exec();
         if (res.deletedCount == 1) {
             return {
                 status: 200

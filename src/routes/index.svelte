@@ -45,17 +45,19 @@
 
 <style lang="scss">
 	#main {
-		// width: 100%;
-		// height: 100%;
+		width: 100%;
+		height: 100%;
 	}
 	h1 {
 		margin: 0;
 		padding: 1rem;
+		font-size: 3rem;
 		& > span {
 			font-weight: lighter;
 		}
 	}
 	button {
+		font-size: 1.5rem;
 		border: none;
 		text-decoration: none;
 		padding: 1rem;

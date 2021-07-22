@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	import EditBook from '$lib/edit-book.svelte';
-	// import { selectedBook } from '$lib/stores';
 
 	export const load: Load = async function ({ page, fetch, session, context }) {
 		// First fetch our current user
@@ -18,16 +17,6 @@
 					}
 				};
 			}
-			// Shouldn't ever 404 i don't think
-			// case 404: {
-			// 	// const resTwo = await fetch('', { method: 'PUT' });
-			// 	// Then
-			// 	return {
-			// 		props: {
-			// 			books: []
-			// 		}
-			// 	};
-			// }
 			default: {
 				break;
 			}
@@ -47,7 +36,11 @@
 	let selected: number = -1;
 
 	async function delBook(i: number, _id: string) {
-		const res = await fetch('/user/books', { method: 'DELETE', body: JSON.stringify(_id) });
+		const res = await fetch('/user/books', {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(_id)
+		});
 		if (res.ok) {
 			books = [...books.slice(0, i), ...books.slice(i + 1)];
 		}
@@ -62,7 +55,6 @@
 	}
 
 	async function modifyBook(e: CustomEvent<Book>) {
-		console.log(e.detail);
 		// fetch res
 		const res = await fetch('/user/books', {
 			method: 'POST',
@@ -73,7 +65,6 @@
 			// Update home array
 			books[selected] = e.detail;
 		}
-
 		// Then cancel
 		cancel();
 	}
@@ -83,18 +74,32 @@
 	}
 </script>
 
-<div>
+<div class="main">
 	{#if selected != -1}
 		<EditBook book={books[selected]} on:submit={modifyBook} on:cancel={cancel} />
 	{/if}
+	<div class="header">
+		<button on:click={() => (editMode = !editMode)}>
+			{#if editMode}
+				✕
+			{:else}
+				⚙
+			{/if}
+		</button>
+	</div>
 	<div id="grid">
 		{#each books as book, i}
 			{#if editMode}
 				<div on:click={() => (selected = i)} class="book">
 					<h2>{book.name}</h2>
-					<div>{book.url} /></div>
-					<!-- <a href="/books/read"><button on:click={() => selBook(book)}>Read!</button></a> -->
-					<button on:click={() => delBook(i, book._id)}>✕</button>
+					<div>{book.url}</div>
+					<button
+						class="delete-book"
+						on:click={(e) => {
+							e.stopPropagation();
+							delBook(i, book._id);
+						}}>✕</button
+					>
 				</div>
 			{:else}
 				<a href="/books/{book._id}" class="book">
@@ -105,38 +110,101 @@
 		{/each}
 		{#if editMode}
 			<div class="book">
-				<button on:click={() => addBook()}>add</button>
+				<button class="add-book" on:click={() => addBook()}>+</button>
 			</div>
 		{/if}
 	</div>
-	{#if editMode}
-		<button on:click={() => (editMode = !editMode)}>No More Edit Mode</button>
-	{:else}
-		<button on:click={() => (editMode = !editMode)}>Edit Mode</button>
-	{/if}
 </div>
 
 <style lang="scss">
+	.main {
+		margin: 0 1rem 1rem 1rem;
+	}
 	#grid {
 		display: grid;
 		grid-gap: 1rem;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 		& > .book {
-			background-color: var(--yel);
-			& span {
-				padding: 0 0.5rem 0 0.5rem;
-			}
+			background-color: var(--foreground-color);
 			& > h2 {
-				padding: 0;
+				padding: 1rem 1rem 0rem 1rem;
 				margin: 0;
+				font-size: 3rem;
+				word-break: break-word;
+				text-align: right;
+			}
+			& > div {
+				padding: 0rem 1rem 1rem 1rem;
+				background-color: var(--foreground-color);
+				text-align: right;
+				opacity: 60%;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+		}
+		& > a.book {
+			outline: none;
+			text-decoration: none;
+
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			&:link {
+				color: var(--background-color);
+			}
+			&:visited {
+				color: var(--background-color);
+			}
+		}
+		& > div.book {
+			color: var(--background-color);
+			position: relative;
+
+			& > button {
+				border: none;
+				text-decoration: none;
+				z-index: 5;
+				&:hover {
+					cursor: pointer;
+				}
+				&.add-book {
+					font-size: 3rem;
+					margin: 0 auto;
+				}
+				&.delete-book {
+					position: absolute;
+					top: 0;
+					right: 0;
+				}
 			}
 		}
 	}
-	button {
-		border: none;
-		text-decoration: none;
-		padding: 1rem;
-		color: var(--background-color);
-		background-color: var(--foreground-color);
+	.header {
+		display: grid;
+		justify-items: center;
+		margin-bottom: 0.5rem;
+		// grid-auto-columns: min-content;
+		// grid-auto-rows: min-content;
+		& > button {
+			transition: 1s;
+			&:hover {
+				cursor: pointer;
+			}
+
+			border: none;
+			text-decoration: none;
+
+			font-size: 2rem;
+
+			color: var(--foreground-color);
+			background-color: var(--background-color);
+		}
 	}
+	// button {
+	// 	border: none;
+	// 	text-decoration: none;
+	// 	padding: 1rem;
+	// 	color: var(--background-color);
+	// 	background-color: var(--foreground-color);
+	// }
 </style>

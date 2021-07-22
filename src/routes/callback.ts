@@ -9,26 +9,35 @@ const clientId = import.meta.env.VITE_CLIENT_ID;
 const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
 
 export const get: RequestHandler = async function (req) {
+    console.log("calling get");
     const code = req.query.get('code');
     if (!code) {
+        console.log("gsdfsdfsdf");
         return {};
     }
     // We want to exchange code for access token,
     const accessToken: string = await getAccessToken(code);
+    console.log("naidesu");
     // Use access token to get user info from api
     // An object that contains info
     const user = await getUser(accessToken);
+    console.log("got user");
 
     // Setting user to login username?
     req.locals.user = user.login;
+    console.log("setting req locals");
 
     // Check db for if user is preexisting or new
     const userDB = await User.findOne({ name: req.locals.user }).exec();
+    console.log("go user db");
     // If !exists create
     if (!userDB) {
+        console.log("putting our reeq in");
         await put(req);
-        await fetch('/user', { method: "PUT" });
+        console.log("successfully put our req in, now creating new user");
+        console.log("successfully created new user");
     }
+    console.log("fetched w/ no errors");
 
     return {
         status: 302,
