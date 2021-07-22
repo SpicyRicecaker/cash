@@ -85,13 +85,13 @@
 		}
 	}
 	function delBook(idx: number) {
-		books = [...books.slice(0, idx), ...books.slice(idx + 1)];
+		// books = [...books.slice(0, idx), ...books.slice(idx + 1)];
 		booksValidator = [...booksValidator.slice(0, idx), ...booksValidator.slice(idx + 1)];
 	}
-	function addBook() {
-		books = [...books, bookDefault()];
-		booksValidator = [...booksValidator, [true, true, true, false]];
-	}
+	// function addBook() {
+	// 	books = [...books, bookDefault()];
+	// 	booksValidator = [...booksValidator, [true, true, true, false]];
+	// }
 	function selBook(book: Book) {
 		$selectedBook = book;
 	}

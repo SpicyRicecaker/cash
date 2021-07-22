@@ -1,3 +1,5 @@
+import type { Writable } from 'svelte/store';
+
 export interface Inquisitor {
     _id: string;
     type: string,
@@ -50,4 +52,20 @@ export interface Theme {
     wht: string;
     foregroundColor: string;
     backgroundColor: string;
+}
+export interface PushFunction {
+    (book: Book): void;
+}
+
+export interface DelFunction {
+    (): void;
+}
+
+export interface ModifyFunction {
+    (i: number, key: string, value: string): void;
+}
+export interface WritableBooks<T> extends Writable<T> {
+    push: PushFunction
+    del: DelFunction
+    modify: ModifyFunction
 }

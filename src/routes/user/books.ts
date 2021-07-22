@@ -97,7 +97,8 @@ export const put: RequestHandler = async (req) => {
 
 export const del: RequestHandler = async (req) => {
     try {
-        const res = await User.deleteOne({ name: req.locals.user }).exec();
+        const _id = req.body;
+        const res = await User.deleteOne({ name: req.locals.user, 'books._id': _id }).exec();
         if (res.deletedCount == 1) {
             return {
                 status: 200
