@@ -99,8 +99,8 @@ export const put: RequestHandler = async (req) => {
 export const del: RequestHandler = async (req) => {
     try {
         const _id = req.body;
-        const res = await User.updateOne({ name: req.locals.user }, { $pull: { "books.$._id": _id } }).exec();
-        if (res.deletedCount == 1) {
+        const res = await User.updateOne({ name: req.locals.user }, { $pull: { books: { _id: _id } } }).exec();
+        if (res.nModified == 1) {
             return {
                 status: 200
             }
