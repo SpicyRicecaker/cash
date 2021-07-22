@@ -1,6 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { User } from '$lib/db';
 import type { Book } from '$lib/types';
+import { ObjId } from '$lib/db';
 
 export const get: RequestHandler = async (req) => {
     try {
@@ -58,24 +59,27 @@ export const put: RequestHandler = async (req) => {
         if (req.locals.user == "") {
             throw "Username is empty"
         }
-        const book = {
+        const book: Book = {
+            _id: `${ObjId()}`,
             name: "test",
             url: "http://localhost:1234",
             content: {
+                _id: `${ObjId()}`,
                 type: "selector",
                 value: ".mt-5"
             },
             nextChapter: {
+                _id: `${ObjId()}`,
                 type: "innerHTML",
                 value: "Next chapter"
             },
             prevChapter: {
+                _id: `${ObjId()}`,
                 type: "innerHTML",
                 value: "Prev chapter"
             },
         };
-        // First get the user
-        const res = User.updateOne({ name: req.locals.user }, { $push: { books: book } }).exec();
+        const res = await User.updateOne({ name: req.locals.user }, { $push: { books: book } }).exec();
         switch (res.nModified) {
             case 0: {
                 throw new Error("Unable to modify document");

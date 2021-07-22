@@ -48,6 +48,7 @@
 	async function addBook() {
 		const res = await fetch('/user/books', { method: 'PUT' });
 		if (res.ok) {
+			// Adding book w/id
 			const book = await res.json();
 			// Insert this book in
 			books = [...books, book];
@@ -88,7 +89,7 @@
 		</button>
 	</div>
 	<div id="grid">
-		{#each books as book, i}
+		{#each books as book, i (book._id)}
 			{#if editMode}
 				<div on:click={() => (selected = i)} class="book">
 					<h2>{book.name}</h2>
@@ -117,6 +118,7 @@
 <style lang="scss">
 	.main {
 		margin: 0 1rem 1rem 1rem;
+		position: relative;
 	}
 	#grid {
 		display: grid;

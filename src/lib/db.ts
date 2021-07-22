@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-const { Schema/*, Types: { ObjectId } */} = mongoose;
+const { Schema, Types: { ObjectId } } = mongoose;
 
 const mongoDBURI = import.meta.env.VITE_MONGODB_URI as string;
 // const ip = import.meta.env.VITE_IP as string;
@@ -32,4 +32,4 @@ const userSchema = new Schema({
 });
 
 export const User = mongoose.model('User', userSchema);
-// export const ObjId = (): string => (new ObjectId().toHexString());
+export const ObjId = (): string => (new ObjectId().toHexString());
