@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema, Types: { ObjectId } } = mongoose;
 
-const mongoDBURI = (process.env.MONGODB_URI as string);
+const mongoDBURI = (import.meta.env.MONGODB_URI as string);
 
 mongoose
     .connect(mongoDBURI, { useNewUrlParser: true, useUnifiedTopology: true })

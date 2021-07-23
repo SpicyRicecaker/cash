@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import type { Request } from '@sveltejs/kit';
-const secret = process.env.JWT_SECRET;
+const secret = import.meta.env.JWT_SECRET;
 
 // generate the JWT
 export const generateToken = (user: string): string => (
