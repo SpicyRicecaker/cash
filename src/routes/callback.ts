@@ -24,8 +24,6 @@ export const get: RequestHandler = async function (req) {
     req.locals.user = user.login;
     req.locals.token = generateToken(user.login);
 
-    // Generate new authorization thing?
-
     // Check db for if user is preexisting or new
     const userDB = await User.findOne({ name: req.locals.user }).exec();
     // If !exists create
@@ -36,10 +34,8 @@ export const get: RequestHandler = async function (req) {
     return {
         status: 302,
         headers: {
-            location: '/'
+            location: '/',
         }
-        // Json stringify docs basically say ([object], [closure, for filtering], [# of spaces for indent])
-        // body: JSON.stringify(user, null, 2)
     }
 }
 

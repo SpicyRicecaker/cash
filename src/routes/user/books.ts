@@ -2,11 +2,10 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { User } from '$lib/db';
 import type { Book } from '$lib/types';
 import { ObjId } from '$lib/db';
-import { validate } from '$lib/jwt';
 
 export const get: RequestHandler = async (req) => {
     try {
-        if (!validate(req)) {
+        if (!req.locals.authenticated) {
             throw new Error("You're not logged in");
         }
         const user = await User.findOne({ name: req.locals.user }).exec();
@@ -31,6 +30,9 @@ export const get: RequestHandler = async (req) => {
 
 export const post: RequestHandler = async (req) => {
     try {
+        if (!req.locals.authenticated) {
+            throw new Error("You're not logged in");
+        }
         const book = req.body as unknown as Book;
         if (book) {
             const res = await User.updateOne({ name: req.locals.user, 'books._id': book._id }, { $set: { "books.$": book } }).exec();
@@ -59,6 +61,9 @@ export const post: RequestHandler = async (req) => {
 
 export const put: RequestHandler = async (req) => {
     try {
+        if (!req.locals.authenticated) {
+            throw new Error("You're not logged in");
+        }
         // Add new book to user and return it
         if (req.locals.user == "") {
             throw "Username is empty"
@@ -106,6 +111,9 @@ export const put: RequestHandler = async (req) => {
 
 export const del: RequestHandler = async (req) => {
     try {
+        if (!req.locals.authenticated) {
+            throw new Error("You're not logged in");
+        }
         const _id = req.body;
         const res = await User.updateOne({ name: req.locals.user }, { $pull: { books: { _id: _id } } }).exec();
         if (res.nModified == 1) {

@@ -3,32 +3,33 @@
 
 	export const load: Load = async ({ session }) => ({
 		props: {
+			authenticated: session.authenticated,
 			user: session.user
 		}
 	});
 </script>
 
 <script lang="ts">
-	export let user: any;
-	$: console.log(user)
+	export let user: string;
+	export let authenticated: boolean;
 </script>
 
 <!-- Large part of auth code from https://blog.hyper63.com/sveltekit-authentication/ -->
 
 <div id="main">
 	<h1>
-		{#if user}
+		{#if authenticated}
 			Good day,
 			<span>
 				{user}
 			</span>
 		{:else}
-			<h1>Welcome!</h1>
+			<h1>Welcome! Please signup/login</h1>
 		{/if}
 	</h1>
 
 	<div id="strip">
-		{#if user}
+		{#if authenticated}
 			<a href="/books">
 				<button>Books</button>
 			</a>

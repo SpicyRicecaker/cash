@@ -6,8 +6,6 @@ export interface Inquisitor {
     value: string
 }
 
-// const inquisitorDefault = (): Inquisitor => ({ _id: '', type: '', value: '' })
-
 export interface Book {
     _id: string;
     url: string;
@@ -22,17 +20,6 @@ export interface ReadBook {
     prevChapter: string;
     nextChapter: string;
 }
-
-// export const bookDefault = (): Book => (
-//     {
-//         _id: '',
-//         url: '',
-//         name: '',
-//         content: inquisitorDefault(),
-//         nextChapter: inquisitorDefault(),
-//         prevChapter: inquisitorDefault()
-//     }
-// )
 
 export const readBookDefault = (): ReadBook => ({
     content: '',
