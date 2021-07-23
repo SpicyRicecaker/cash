@@ -6,8 +6,8 @@ import { generateToken } from '$lib/jwt';
 const tokenURL = "https://github.com/login/oauth/access_token";
 const apiURL = "https://api.github.com/user";
 
-const clientId = import.meta.env.CLIENT_ID;
-const clientSecret = import.meta.env.CLIENT_SECRET;
+const clientId = import.meta.env.VITE_CLIENT_ID;
+const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
 
 export const get: RequestHandler = async function (req) {
     const code = req.query.get('code');
