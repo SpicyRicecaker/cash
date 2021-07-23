@@ -126,6 +126,8 @@
 	}
 
 	async function updateUrl() {
+		// Move to top of page
+		window.scrollTo(0, 0);
 		// Send request to server
 		await fetch('/user/book-individual', {
 			method: 'POST',
@@ -172,7 +174,8 @@
 	#nav {
 		text-align: center;
 	}
-	#prev_chapter, #next_chapter {
+	#prev_chapter,
+	#next_chapter {
 		// Button passives
 		border: none;
 		text-decoration: none;
@@ -180,7 +183,7 @@
 		padding: 1rem 0.25rem;
 		margin: 0;
 
-		// Font 
+		// Font
 		font-size: 1rem;
 		color: var(--foreground-color);
 		text-decoration: underline;
@@ -190,9 +193,8 @@
 			cursor: pointer;
 		}
 		&:active {
-			color: var(--red)
+			color: var(--red);
 		}
-
 	}
 	:global(html) {
 		background-color: var(--backdrop);
