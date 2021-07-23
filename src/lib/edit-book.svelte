@@ -10,8 +10,10 @@
 		dispatch('cancel');
 	}
 
-	const submit = () =>
-		booksValidator.some((v) => !v) ? console.log('bad') : dispatch('submit', book);
+	$: invalid = someInvalid(booksValidator);
+	const someInvalid = (booksValidator: boolean[]): boolean => booksValidator.some((v) => !v);
+
+	const submit = () => (invalid ? {} : dispatch('submit', book));
 
 	let booksValidator = [true, true, true];
 
@@ -20,66 +22,78 @@
 </script>
 
 <div id="form">
+	<div id="items">
+		<div>
+			<label for="name">name:</label>
+			<input placeholder="innerHTML | selector" bind:value={book.name} id="name" />
+		</div>
+		<div>
+			<label for="url">url:</label>
+			<input placeholder="e.g. mangadex.org" bind:value={book.url} id="url" />
+		</div>
+
+		<div>
+			<label for="content-type">content type:</label>
+			<input
+				placeholder="innerHTML | selector"
+				on:keyup={() => handleTypeInputChange(book.content.type, 0)}
+				bind:value={book.content.type}
+				class={booksValidator[0] ? 'valid' : 'invalid'}
+				id="content-type"
+			/>
+		</div>
+
+		<div>
+			<label for="content-value">content value:</label>
+			<input placeholder="e.g. .mt-5" bind:value={book.content.value} id="content-value" />
+		</div>
+
+		<div>
+			<label for="prev-chapter-type">prev chapter type:</label>
+			<input
+				placeholder="innerHTML | selector"
+				on:keyup={() => handleTypeInputChange(book.prevChapter.type, 1)}
+				bind:value={book.prevChapter.type}
+				class={booksValidator[1] ? 'valid' : 'invalid'}
+				id="prev-chapter-type"
+			/>
+		</div>
+
+		<div>
+			<label for="prev-chapter-value">prev chapter value:</label>
+			<input
+				placeholder="e.g. prev chapter or .prev-chapter"
+				bind:value={book.prevChapter.value}
+				id="prev-chapter-value"
+			/>
+		</div>
+
+		<div>
+			<label for="next-chapter-type">next chapter type:</label>
+			<input
+				placeholder="innerHTML | selector"
+				on:keyup={() => handleTypeInputChange(book.nextChapter.type, 2)}
+				bind:value={book.nextChapter.type}
+				class={booksValidator[2] ? 'valid' : 'invalid'}
+				id="next-chapter-type"
+			/>
+		</div>
+
+		<div>
+			<label for="next-chapter-value">next chapter value:</label>
+			<input
+				placeholder="e.g. next chapter or .next-chapter"
+				bind:value={book.nextChapter.value}
+				id="next-chapter-value"
+			/>
+		</div>
+	</div>
+	<div id="submit">
+		<button class={invalid ? 'invalid' : 'valid'} on:click={submit}>Submit</button>
+	</div>
+
 	<div class="del">
 		<button id="cancel" on:click={cancel}>✕</button>
-	</div>
-	<div>
-		<label for="name">name</label>
-		<input bind:value={book.name} id="name" />
-	</div>
-	<div>
-		<label for="url">url</label>
-		<input bind:value={book.url} id="url" />
-	</div>
-
-	<div>
-		<label for="content-type">content type</label>
-		<input
-			on:keyup={() => handleTypeInputChange(book.content.type, 0)}
-			bind:value={book.content.type}
-			class={booksValidator[0] ? 'valid' : 'invalid'}
-			id="content-type"
-		/>
-	</div>
-
-	<div>
-		<label for="content-value">content value</label>
-		<input bind:value={book.content.value} id="content-value" />
-	</div>
-
-	<div>
-		<label for="prev-chapter-type">prev chapter type</label>
-		<input
-			on:keyup={() => handleTypeInputChange(book.prevChapter.type, 1)}
-			bind:value={book.prevChapter.type}
-			class={booksValidator[1] ? 'valid' : 'invalid'}
-			id="prev-chapter-type"
-		/>
-	</div>
-
-	<div>
-		<label for="prev-chapter-value">prev chapter value</label>
-		<input bind:value={book.prevChapter.value} id="prev-chapter-value" />
-	</div>
-
-	<div>
-		<label for="next-chapter-type">next chapter type</label>
-		<input
-			on:keyup={() => handleTypeInputChange(book.nextChapter.type, 2)}
-			bind:value={book.nextChapter.type}
-			class={booksValidator[2] ? 'valid' : 'invalid'}
-			id="next-chapter-type"
-		/>
-	</div>
-
-	<div>
-		<label for="next-chapter-value">next chapter value</label>
-		<input bind:value={book.nextChapter.value} id="next-chapter-value" />
-	</div>
-
-	<div id="submit">
-		<button on:click={submit}>Submit</button>
-		<div>&nbsp;</div>
 	</div>
 </div>
 
@@ -88,62 +102,122 @@
 		border: none;
 		text-decoration: none;
 		padding: 1rem;
-		// color: var(--background-color);
-		// background-color: var(--foreground-color);
 	}
-	.del {
+
+	// Layout for the form
+	#form {
+		// Create popup over current page
 		position: absolute;
-		top: 0;
-		right: 0;
-		& > button#cancel {
-			background-color: var(--background-color);
-			color: var(--foreground-color);
-			font-size: 3rem;
-			line-height: 1.8rem;
-		}
-	}
-	#submit {
-		display: flex;
-		gap: 1rem;
-		& > button {
-			flex: 0;
-			color: var(--background-color);
-			background-color: var(--foreground-color);
-			font-size: 1.5rem;
-		}
-		& > div {
-			flex: 1;
-			background-color: var(--foreground-color);
-		}
-		gap: 1re;
-	}
-	input {
-		outline: none;
-		border: 0.1rem solid gainsboro;
-		padding: 1rem;
-		border-radius: 2rem;
-		color: var(--foreground-color);
+		z-index: 1;
+		width: 100%;
+		height: 100vh;
+
+		// Make it opaque
+		// background-color: var(--background-color);
 		background-color: var(--background-color);
-		transition: 0.2s;
-		border: 0.1rem solid gray;
-		/* border: 2px inset; */
-		&:focus {
-			border: 0.1rem solid #ababab;
-			box-shadow: 0 0 0.2rem gray;
-		}
-		&.valid {
-			border-color: var(--grn);
-		}
-		&.invalid {
-			border-color: var(--red);
+
+		// List items in a grid
+		display: flex;
+		flex-direction: column;
+	}
+
+	#items {
+		& > div {
+			border-bottom: 0.08rem dashed var(--foreground-color);
+			// Minimize the extra padding to each field
+
+			// Center items
+			justify-self: center;
+
+			// For each form
+			display: flex;
+
+			padding: 0.5rem;
+
+			// Set font size
+			font-size: 2rem;
+			& > label {
+				opacity: 80%;
+				align-self: baseline;
+			}
+
+			& > input {
+				flex: 1;
+				padding: none;
+				margin: none;
+				align-self: baseline;
+				// display: inline-block;
+				// _underlined works_
+				border: none;
+				// border-bottom: 2px solid var(--foreground-color);
+				border-radius: 0%;
+				outline: none;
+
+				// Color same as normal text
+				color: var(--foreground-color);
+				// background-color: var(--background-color);
+				background: transparent;
+				font-size: 2rem;
+
+				margin-left: 1rem;
+
+				transition: 0.2s;
+				// On focus
+				&:focus {
+					border-right: 2px solid var(--foreground-color);
+					color: var(--yel);
+				}
+				&.valid {
+					border-color: var(--grn);
+				}
+				&.invalid {
+					border-color: var(--red);
+					border-right: 2px solid var(--red);
+				}
+			}
 		}
 	}
 
-	#form {
-		position: absolute;
-		z-index: 1;
-		background-color: var(--background-color);
-		width: 100%;
-		height: 100%;
+	#submit {
+		// display: flex;
+		// gap: 1rem;
+		text-align: center;
+		& > button {
+			padding: 0.5rem;
+
+			flex: 0;
+			&.valid {
+				color: var(--grn);
+			}
+			&.invalid {
+				color: var(--red);
+				text-decoration: line-through;
+				pointer-events: none;
+			}
+			// background-color: var(--background-color);
+			background: transparent;
+			font-size: 2rem;
+			&:hover {
+				cursor: pointer;
+			}
+		}
+		& > div {
+			flex: 1;
+			// background-color: var(--foreground-color);
+		}
+		// gap: 1rem;
+	}
+
+	.del {
+		margin: 0 auto;
+		& > button#cancel {
+			background-color: var(--background-color);
+			color: var(--foreground-color);
+			font-size: 2rem;
+			line-height: 1.8rem;
+			&:hover {
+				cursor: pointer;
+			}
+		}
 	}
 </style>

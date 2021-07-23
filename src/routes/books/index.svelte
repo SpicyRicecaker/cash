@@ -159,13 +159,16 @@
 		& > div.book {
 			color: var(--background-color);
 			position: relative;
+			&:hover {
+				cursor: pointer;
+			}
 
 			& > button {
-				border: none;
-				text-decoration: none;
 				&:hover {
 					cursor: pointer;
 				}
+				border: none;
+				text-decoration: none;
 				&.delete-book {
 					position: absolute;
 					top: 0;
