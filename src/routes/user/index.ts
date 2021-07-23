@@ -3,6 +3,9 @@ import { User } from '$lib/db';
 
 export const put: RequestHandler = async (req) => {
     try {
+        if (!req.locals.authenticated) {
+            throw "You're not authenticated";
+        }
         if (req.locals.user == "") {
             throw "Username is empty"
         }

@@ -9,6 +9,9 @@ interface PostBook {
 // Return book of id given id in req.body
 export const get: RequestHandler = async (req) => {
     try {
+        if (!req.locals.authenticated) {
+            throw new Error("You're not logged in");
+        }
         const _id = req.query.get('_id');
         if (_id) {
             // Request book with id in question
@@ -41,6 +44,9 @@ export const get: RequestHandler = async (req) => {
 
 export const post: RequestHandler = async (req) => {
     try {
+        if (!req.locals.authenticated) {
+            throw new Error("You're not logged in");
+        }
         const _id = (req.body as unknown as PostBook)._id;
         const newUrl = (req.body as unknown as PostBook).newUrl;
         if (_id && newUrl) {

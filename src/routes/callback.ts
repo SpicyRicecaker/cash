@@ -28,6 +28,7 @@ export const get: RequestHandler = async function (req) {
     const userDB = await User.findOne({ name: req.locals.user }).exec();
     // If !exists create
     if (!userDB) {
+        req.locals.authenticated = true;
         await put(req);
     }
 
