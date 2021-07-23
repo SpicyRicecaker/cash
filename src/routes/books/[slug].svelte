@@ -154,10 +154,10 @@
 	</div>
 	<nav id="nav">
 		{#if genBook.prevChapter}
-			<span on:click={updatePrevChapter} id="prev_chapter">Prev</span>
+			<button on:click={updatePrevChapter} id="prev_chapter">Prev</button>
 		{/if}
 		{#if genBook.nextChapter}
-			<span on:click={updateNextChapter} id="next_chapter">Next</span>
+			<button on:click={updateNextChapter} id="next_chapter">Next</button>
 		{/if}
 	</nav>
 </div>
@@ -166,12 +166,42 @@
 	#content {
 		background-color: var(--background-color);
 		color: var(--foreground-color);
-		a {
-			color: var(--foreground-color);
-			&:active {
-				color: var(--red);
-			}
+
+		padding: 1rem;
+	}
+	#nav {
+		text-align: center;
+	}
+	#prev_chapter, #next_chapter {
+		// Button passives
+		border: none;
+		text-decoration: none;
+		background: transparent;
+		padding: 1rem 0.25rem;
+		margin: 0;
+
+		// Font 
+		font-size: 1rem;
+		color: var(--foreground-color);
+		text-decoration: underline;
+
+		// Button actives
+		&:hover {
+			cursor: pointer;
 		}
+		&:active {
+			color: var(--red)
+		}
+
+	}
+	:global(html) {
+		background-color: var(--backdrop);
+	}
+	:global(body) {
+		background-color: var(--backdrop);
+	}
+	:global(#svelte) {
+		margin: 0 auto;
 	}
 
 	// Used media queries from https://getbootstrap.com/docs/3.4/css/
@@ -180,23 +210,18 @@
 	$screen-lg-min: 1200px;
 
 	@media (min-width: $screen-sm-min) {
-		#content {
+		:global(#svelte) {
 			max-width: none;
 		}
 	}
 	@media (min-width: $screen-md-min) {
-		#content {
+		:global(#svelte) {
 			max-width: 50%;
 		}
 	}
 	@media (min-width: $screen-lg-min) {
-		#content {
+		:global(#svelte) {
 			max-width: 30%;
 		}
 	}
-	// span {
-	// 	cursor: pointer;
-	// 	color: blue;
-	// 	text-decoration: underline;
-	// }
 </style>

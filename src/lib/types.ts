@@ -52,6 +52,7 @@ export interface Theme {
     wht: string;
     foregroundColor: string;
     backgroundColor: string;
+    backdrop: string;
 }
 export interface PushFunction {
     (book: Book): void;
