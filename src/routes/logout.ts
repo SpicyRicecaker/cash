@@ -5,7 +5,7 @@ export const get: RequestHandler = async function get(req) {
         status: 302,
         headers: {
             location: '/',
-            'set-cookie': `user=; Path=/; HttpOnly; Expires=0`
+            'set-cookie': `user=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; token=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`
         }
     }
 }

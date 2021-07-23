@@ -2,9 +2,13 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { User } from '$lib/db';
 import type { Book } from '$lib/types';
 import { ObjId } from '$lib/db';
+import { validate } from '$lib/jwt';
 
 export const get: RequestHandler = async (req) => {
     try {
+        if (!validate(req)) {
+            throw new Error("You're not logged in");
+        }
         const user = await User.findOne({ name: req.locals.user }).exec();
         if (user) {
             return {

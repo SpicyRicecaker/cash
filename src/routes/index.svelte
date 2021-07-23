@@ -10,6 +10,7 @@
 
 <script lang="ts">
 	export let user: any;
+	$: console.log(user)
 </script>
 
 <!-- Large part of auth code from https://blog.hyper63.com/sveltekit-authentication/ -->

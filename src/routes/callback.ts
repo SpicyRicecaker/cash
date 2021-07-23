@@ -1,6 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { User } from '$lib/db';
 import { put } from '../routes/user/index';
+import { generateToken } from '$lib/jwt';
 
 const tokenURL = "https://github.com/login/oauth/access_token";
 const apiURL = "https://api.github.com/user";
@@ -21,6 +22,9 @@ export const get: RequestHandler = async function (req) {
 
     // Setting user to login username?
     req.locals.user = user.login;
+    req.locals.token = generateToken(user.login);
+
+    // Generate new authorization thing?
 
     // Check db for if user is preexisting or new
     const userDB = await User.findOne({ name: req.locals.user }).exec();
