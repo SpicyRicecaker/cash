@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { sanitize } from 'dompurify';
 import { browser } from '$app/env';
 

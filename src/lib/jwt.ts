@@ -12,7 +12,6 @@ export const generateToken = (user: string): string => (
 
 // validate the token supplied in request header
 export function validate(req: Request): boolean {
-    // console.log('req is lfldsfkasdlfas', req);
     try {
         const decoded = jwt.verify(req.locals.token, (secret as string));
         if (!decoded || (decoded as jwt.JwtPayload).auth !== 'github') {

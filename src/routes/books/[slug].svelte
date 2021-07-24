@@ -117,8 +117,6 @@
 				genBook.content = (await purifySanitize)(matchValue(book.content, page));
 				genBook.prevChapter = matchValue(book.prevChapter, page);
 				genBook.nextChapter = matchValue(book.nextChapter, page);
-
-				console.log(genBook);
 			}
 		} catch (e) {
 			console.log(e);
