@@ -10,13 +10,10 @@ const config = {
     KEEP_CONTENT: false
 };
 
-export const setup = {
-    resParser: () => { },
-    rejParser: () => { },
-};
+let resParser = () => { };
 
 export const parser = new Promise<DOMParser>((resolve) => {
-    setup.resParser = () => {
+    resParser = () => {
         resolve(new DOMParser());
     };
 });
@@ -25,7 +22,7 @@ export let purifySanitize = new Promise<typeof sanitize>(() => { });
 
 if (browser) {
     (async () => {
-        await setup.resParser();
+        resParser();
         const v = await import('dompurify');
         v.default.setConfig(config);
         purifySanitize = Promise.resolve(v.default.sanitize);

@@ -1,5 +1,3 @@
-import type { Writable } from 'svelte/store';
-
 export interface Inquisitor {
     _id: string;
     type: string,
@@ -21,12 +19,6 @@ export interface ReadBook {
     nextChapter: string;
 }
 
-export const readBookDefault = (): ReadBook => ({
-    content: '',
-    prevChapter: '',
-    nextChapter: ''
-})
-
 export interface Theme {
     name: string;
     blk: string;
@@ -40,20 +32,4 @@ export interface Theme {
     foregroundColor: string;
     backgroundColor: string;
     backdrop: string;
-}
-export interface PushFunction {
-    (book: Book): void;
-}
-
-export interface DelFunction {
-    (): void;
-}
-
-export interface ModifyFunction {
-    (i: number, key: string, value: string): void;
-}
-export interface WritableBooks<T> extends Writable<T> {
-    push: PushFunction
-    del: DelFunction
-    modify: ModifyFunction
 }

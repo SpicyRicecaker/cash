@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 const { Schema, Types: { ObjectId } } = mongoose;
-
 const mongoDBURI = (import.meta.env.VITE_MONGODB_URI as string);
 
 mongoose

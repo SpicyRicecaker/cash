@@ -150,26 +150,35 @@
 	}
 </script>
 
-<div id="content">
-	<div id="book">
-		{@html genBook.content}
+<div id="backdrop">
+	<div id="content">
+		<div id="book">
+			{@html genBook.content}
+		</div>
+		<nav id="nav">
+			{#if genBook.prevChapter}
+				<button on:click={updatePrevChapter} id="prev_chapter">Prev</button>
+			{/if}
+			{#if genBook.nextChapter}
+				<button on:click={updateNextChapter} id="next_chapter">Next</button>
+			{/if}
+		</nav>
 	</div>
-	<nav id="nav">
-		{#if genBook.prevChapter}
-			<button on:click={updatePrevChapter} id="prev_chapter">Prev</button>
-		{/if}
-		{#if genBook.nextChapter}
-			<button on:click={updateNextChapter} id="next_chapter">Next</button>
-		{/if}
-	</nav>
 </div>
 
 <style lang="scss">
+	#backdrop {
+		width: 100%;
+		background-color: var(--backdrop);
+	}
 	#content {
+		// Set content background
 		background-color: var(--background-color);
 		color: var(--foreground-color);
 
 		padding: 1rem;
+
+		margin: 0 auto;
 	}
 	#nav {
 		text-align: center;
@@ -196,33 +205,23 @@
 			color: var(--red);
 		}
 	}
-	:global(html) {
-		background-color: var(--backdrop);
-	}
-	:global(body) {
-		background-color: var(--backdrop);
-	}
-	:global(#svelte) {
-		margin: 0 auto;
-	}
-
 	// Used media queries from https://getbootstrap.com/docs/3.4/css/
 	$screen-sm-min: 768px;
 	$screen-md-min: 992px;
 	$screen-lg-min: 1200px;
 
 	@media (min-width: $screen-sm-min) {
-		:global(#svelte) {
+		#content {
 			max-width: none;
 		}
 	}
 	@media (min-width: $screen-md-min) {
-		:global(#svelte) {
+		#content {
 			max-width: 50%;
 		}
 	}
 	@media (min-width: $screen-lg-min) {
-		:global(#svelte) {
+		#content {
 			max-width: 30%;
 		}
 	}
