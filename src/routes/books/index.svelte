@@ -75,10 +75,10 @@
 	}
 </script>
 
+{#if selected != -1}
+	<EditBook book={books[selected]} on:submit={modifyBook} on:cancel={cancel} />
+{/if}
 <div class="main">
-	{#if selected != -1}
-		<EditBook book={books[selected]} on:submit={modifyBook} on:cancel={cancel} />
-	{/if}
 	<div class="header">
 		<button on:click={() => (editMode = !editMode)}>
 			{#if editMode}
@@ -173,6 +173,8 @@
 					position: absolute;
 					top: 0;
 					right: 0;
+					background-color: var(--red);
+					color: var(--wht);
 				}
 			}
 		}

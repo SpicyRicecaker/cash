@@ -21,79 +21,81 @@
 		(booksValidator[field] = t === 'innerHTML' || t === 'selector');
 </script>
 
-<div id="form">
-	<div id="items">
-		<div>
-			<label for="name">name:</label>
-			<input placeholder="innerHTML | selector" bind:value={book.name} id="name" />
+<div id="popup">
+	<div id="form">
+		<div id="items">
+			<div>
+				<label for="name">name:</label>
+				<input placeholder="innerHTML | selector" bind:value={book.name} id="name" />
+			</div>
+			<div>
+				<label for="url">url:</label>
+				<input placeholder="e.g. mangadex.org" bind:value={book.url} id="url" />
+			</div>
+
+			<div>
+				<label for="content-type">content type:</label>
+				<input
+					placeholder="innerHTML | selector"
+					on:keyup={() => handleTypeInputChange(book.content.type, 0)}
+					bind:value={book.content.type}
+					class={booksValidator[0] ? 'valid' : 'invalid'}
+					id="content-type"
+				/>
+			</div>
+
+			<div>
+				<label for="content-value">content value:</label>
+				<input placeholder="e.g. .mt-5" bind:value={book.content.value} id="content-value" />
+			</div>
+
+			<div>
+				<label for="prev-chapter-type">prev chapter type:</label>
+				<input
+					placeholder="innerHTML | selector"
+					on:keyup={() => handleTypeInputChange(book.prevChapter.type, 1)}
+					bind:value={book.prevChapter.type}
+					class={booksValidator[1] ? 'valid' : 'invalid'}
+					id="prev-chapter-type"
+				/>
+			</div>
+
+			<div>
+				<label for="prev-chapter-value">prev chapter value:</label>
+				<input
+					placeholder="e.g. prev chapter or .prev-chapter"
+					bind:value={book.prevChapter.value}
+					id="prev-chapter-value"
+				/>
+			</div>
+
+			<div>
+				<label for="next-chapter-type">next chapter type:</label>
+				<input
+					placeholder="innerHTML | selector"
+					on:keyup={() => handleTypeInputChange(book.nextChapter.type, 2)}
+					bind:value={book.nextChapter.type}
+					class={booksValidator[2] ? 'valid' : 'invalid'}
+					id="next-chapter-type"
+				/>
+			</div>
+
+			<div>
+				<label for="next-chapter-value">next chapter value:</label>
+				<input
+					placeholder="e.g. next chapter or .next-chapter"
+					bind:value={book.nextChapter.value}
+					id="next-chapter-value"
+				/>
+			</div>
 		</div>
-		<div>
-			<label for="url">url:</label>
-			<input placeholder="e.g. mangadex.org" bind:value={book.url} id="url" />
+		<div id="submit">
+			<button class={invalid ? 'invalid' : 'valid'} on:click={submit}>Submit</button>
 		</div>
 
-		<div>
-			<label for="content-type">content type:</label>
-			<input
-				placeholder="innerHTML | selector"
-				on:keyup={() => handleTypeInputChange(book.content.type, 0)}
-				bind:value={book.content.type}
-				class={booksValidator[0] ? 'valid' : 'invalid'}
-				id="content-type"
-			/>
+		<div class="del">
+			<button id="cancel" on:click={cancel}>✕</button>
 		</div>
-
-		<div>
-			<label for="content-value">content value:</label>
-			<input placeholder="e.g. .mt-5" bind:value={book.content.value} id="content-value" />
-		</div>
-
-		<div>
-			<label for="prev-chapter-type">prev chapter type:</label>
-			<input
-				placeholder="innerHTML | selector"
-				on:keyup={() => handleTypeInputChange(book.prevChapter.type, 1)}
-				bind:value={book.prevChapter.type}
-				class={booksValidator[1] ? 'valid' : 'invalid'}
-				id="prev-chapter-type"
-			/>
-		</div>
-
-		<div>
-			<label for="prev-chapter-value">prev chapter value:</label>
-			<input
-				placeholder="e.g. prev chapter or .prev-chapter"
-				bind:value={book.prevChapter.value}
-				id="prev-chapter-value"
-			/>
-		</div>
-
-		<div>
-			<label for="next-chapter-type">next chapter type:</label>
-			<input
-				placeholder="innerHTML | selector"
-				on:keyup={() => handleTypeInputChange(book.nextChapter.type, 2)}
-				bind:value={book.nextChapter.type}
-				class={booksValidator[2] ? 'valid' : 'invalid'}
-				id="next-chapter-type"
-			/>
-		</div>
-
-		<div>
-			<label for="next-chapter-value">next chapter value:</label>
-			<input
-				placeholder="e.g. next chapter or .next-chapter"
-				bind:value={book.nextChapter.value}
-				id="next-chapter-value"
-			/>
-		</div>
-	</div>
-	<div id="submit">
-		<button class={invalid ? 'invalid' : 'valid'} on:click={submit}>Submit</button>
-	</div>
-
-	<div class="del">
-		<button id="cancel" on:click={cancel}>✕</button>
 	</div>
 </div>
 
@@ -104,21 +106,24 @@
 		padding: 1rem;
 	}
 
-	// Layout for the form
-	#form {
+	#popup {
 		// Create popup over current page
 		position: absolute;
 		z-index: 1;
 		width: 100%;
-		height: 100vh;
+		height: 100%;
 
 		// Make it opaque
-		// background-color: var(--background-color);
 		background-color: var(--background-color);
+	}
 
+	// Layout for the form
+	#form {
 		// List items in a grid
 		display: flex;
 		flex-direction: column;
+
+		padding: 1rem;
 	}
 
 	#items {
@@ -164,7 +169,7 @@
 				transition: 0.2s;
 				// On focus
 				&:focus {
-					border-right: 2px solid var(--foreground-color);
+					border-right: 1rem solid var(--foreground-color);
 					color: var(--yel);
 				}
 				&.valid {
@@ -172,15 +177,13 @@
 				}
 				&.invalid {
 					border-color: var(--red);
-					border-right: 2px solid var(--red);
+					border-right: 1rem solid var(--red);
 				}
 			}
 		}
 	}
 
 	#submit {
-		// display: flex;
-		// gap: 1rem;
 		text-align: center;
 		& > button {
 			padding: 0.5rem;
@@ -194,18 +197,12 @@
 				text-decoration: line-through;
 				pointer-events: none;
 			}
-			// background-color: var(--background-color);
 			background: transparent;
 			font-size: 2rem;
 			&:hover {
 				cursor: pointer;
 			}
 		}
-		& > div {
-			flex: 1;
-			// background-color: var(--foreground-color);
-		}
-		// gap: 1rem;
 	}
 
 	.del {
