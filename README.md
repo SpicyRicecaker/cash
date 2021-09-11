@@ -1,5 +1,5 @@
 # Cash
-... is [live](cash-weld.vercel.app) over at Vercel!
+... is [live](https://cash-weld.vercel.app) over at Vercel!
 
 ## Why $? 
 
