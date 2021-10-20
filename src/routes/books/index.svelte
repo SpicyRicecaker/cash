@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
+	import type { Load, LoadOutput } from '@sveltejs/kit';
 	import EditBook from '$lib/edit-book.svelte';
 
-	export const load: Load = async function ({ page, fetch, session, context }) {
+	export const load: Load = async function ({ page, fetch, session, stuff }) {
 		// First fetch our current user
 		const url: string = '/user/books';
 		const res = await fetch(url);
@@ -15,7 +15,7 @@
 					props: {
 						books: await res.json()
 					}
-				};
+				} as LoadOutput;
 			}
 			default: {
 				break;

@@ -36,7 +36,7 @@ export const post: RequestHandler = async (req) => {
         const book = req.body as unknown as Book;
         if (book) {
             const res = await User.updateOne({ name: req.locals.user, 'books._id': book._id }, { $set: { "books.$": book } }).exec();
-            if (parseInt(res.nModified) === 1) {
+            if (res.modifiedCount === 1) {
                 return {
                     status: 200
                 }
@@ -89,7 +89,7 @@ export const put: RequestHandler = async (req) => {
             },
         };
         const res = await User.updateOne({ name: req.locals.user }, { $push: { books: book } }).exec();
-        switch (res.nModified) {
+        switch (res.modifiedCount) {
             case 0: {
                 throw new Error("Unable to modify document");
             }
@@ -116,7 +116,7 @@ export const del: RequestHandler = async (req) => {
         }
         const _id = req.body;
         const res = await User.updateOne({ name: req.locals.user }, { $pull: { books: { _id: _id } } }).exec();
-        if (res.nModified == 1) {
+        if (res.modifiedCount === 1) {
             return {
                 status: 200
             }

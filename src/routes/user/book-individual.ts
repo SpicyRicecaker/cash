@@ -51,7 +51,7 @@ export const post: RequestHandler = async (req) => {
         const newUrl = (req.body as unknown as PostBook).newUrl;
         if (_id && newUrl) {
             const res = await User.updateOne({ name: req.locals.user, 'books._id': _id }, { $set: { "books.$.url": newUrl } }).exec();
-            if (parseInt(res.nModified) === 1) {
+            if (res.modifiedCount === 1) {
                 return {
                     status: 200
                 }

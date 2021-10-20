@@ -1,10 +1,9 @@
 <script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
+	import type { Load, LoadOutput } from '@sveltejs/kit';
 	// Basically, load the configs of the book based on the url based on user.
 	// This is very good because it means that we don't have to store
 	// Heavy objects that are almost neva used in stores
-
-	export const load: Load = async ({ page, fetch, session, context }) => {
+	export const load: Load = async ({ page, fetch, session, stuff }) => {
 		try {
 			// Get the url from our url
 			const url = `/user/book-individual?_id=${page.params.slug}`;
@@ -16,19 +15,19 @@
 					props: {
 						book: await res.json()
 					}
-				};
+				} as LoadOutput;
 			} else {
 				return {
 					status: res.status,
 					error: new Error(`Could not load book w/ id ${page.params.slug}`)
-				};
+				} as LoadOutput;
 			}
 		} catch (e) {
 			console.log(e);
 			return {
 				status: 500,
 				error: e
-			};
+			} as LoadOutput;
 		}
 	};
 </script>

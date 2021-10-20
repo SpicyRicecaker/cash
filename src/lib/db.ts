@@ -3,7 +3,7 @@ const { Schema, Types: { ObjectId } } = mongoose;
 const mongoDBURI = (import.meta.env.VITE_MONGODB_URI as string);
 
 mongoose
-    .connect(mongoDBURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(mongoDBURI)
     .catch(err => console.log(err.reason));
 
 // See https://stackoverflow.com/a/54320056 for what { typeKey: '$type' } means
